@@ -1,6 +1,6 @@
 
 
-# The safer project <a href=""><img src=".images/logo.png" align="right" height="140" /></a>
+# The safer project <a href=""><img src="safer.png" align="right" height="140" /></a>
 
 ## Why the safer project?
 
