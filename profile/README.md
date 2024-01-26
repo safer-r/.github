@@ -33,8 +33,8 @@ Functions from the safer project present the same encoding structure before the 
 
 ## safer Packages
 
-- [saferDev](https://github.com/yushiHn/saferDev): R function development.
-- [saferMatrix](https://github.com/yushiHn/saferMatrix): matrix handling.
-- [saferGraph](https://github.com/yushiHn/saferGraph): classical graphic handling.
-- [saferTool](https://github.com/yushiHn/saferTool): basic tools.
-- [saferTool2](https://github.com/yushiHn/saferTool2): sophisticated tools.
+- [saferDev](https://github.com/safer-r/saferDev): R function and pipeline development.
+- [saferMatrix](https://github.com/safer-r/saferMatrix): matrix handling.
+- [saferGraph](https://github.com/safer-r/saferGraph): classical graphic handling.
+- [saferTool](https://github.com/safer-r/saferTool): basic tools.
+- [saferTool2](https://github.com/safer-r/saferTool2): sophisticated tools.
