@@ -16,7 +16,7 @@ The safer project gathers R functions with a similar encoding that better contro
 
 Functions from the safer project present the same encoding structure before the 'main' code section, including:
 - Explicit error messages, including the name of the function and corresponding package returning the error.
-- Presence in local R library folders of all the functions and corresponding packages used in the code.
+- Checking in local R library folders of all the functions and corresponding packages used in the code.
 - Classical R operators (`<-`, `(`, etc.) checked for any overwritting in the R scope.
 - Package systematically indicated for any used function (R Scope seeking non authorized). Example base::paste() instead of paste().
 - Argument checking: 
