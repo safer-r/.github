@@ -5,10 +5,63 @@
 ## Why the safer project?
 
 [R](https://www.r-project.org) is a permissive programming language: it will 'try to work' in many situations and returns something, when other programming languages would have returned an error. This advantage partly explains its success, as it is commonly used by non programers. But it comes with several problems which could soften reproducibility or consistency aspects:
-- Non intuitive behaviors (example of the [`sample()`](http://127.0.0.1:25073/library/base/html/sample.html) function when the input is a single integer).
-- Lack of control of the arguments of functions (example with the [`range()`](https://bugs.r-project.org/show_bug.cgi?id=17654) function, or the presence of the `...` argument in functions).
-- Lack of explicit error messages.
-- Weak control of objects with identical names in the R scope.
+- Non intuitive behaviors. Example of the [`sample()`](http://127.0.0.1:25073/library/base/html/sample.html) function:
+    ```
+    > set.seed(16)
+    > y <- sample(1:10, size = 1) # select a single value among integers 1 to 10
+    > y
+    [1] 1
+    
+    > z <- sample(1:10, size = 1) # select a single value among integers 1 to 10
+    > z
+    [1] 8
+    
+    > sample(y, size = 2) # select 2 values among the single value 1: the error result is intuitive
+    Error in sample.int(x, size, replace, prob) : 
+    cannot take a sample larger than the population when 'replace = FALSE'
+    
+    > sample(z, size = 2) # select 2 values among the single value 8: the result is non intuitive, with no warning message
+    [1] 4 6
+    ```
+- Lack of control of the arguments of functions or presence of the `...` argument in functions. Example with the `sum()` or `paste()` functions:
+    ```
+    > sum(1, 2, na.rm = TRUE) # sum of the value 1 and 2 with the use of the argument na.rm = TRUE, which removes any NA before summing.
+    [1] 3
+    
+    > sum(1, 2, na.rn = TRUE) # the returned result, with no warning message, is non intuitive for a non informatician
+    [1] 4
+    
+    > paste(c("a", "b"), collapse = "|") # collapse of the two strings "a" and "b" with "|" as separator
+    [1] "a|b"
+    
+    > paste(c("a", "b"), colapse = "|") # the returned result, with no warning message, is non intuitive for a non informatician
+    [1] "a |" "b |"
+    ```
+    Another example with the [`range()`](https://bugs.r-project.org/show_bug.cgi?id=17654) function.
+- Weak control of objects with identical names in the R scope. Example:
+    ```
+    > mean <- function(...){sum(...)}
+    > mean(1, 2) # the mean() function exists in R. But the new mean() function created is used with no warning message
+    [1] 3
+    ```
+- Lack of explicit error messages. Example:
+    ```
+    > fun1 <- function(x){ # creation of the a() function which returns the value of the input x, except if x == 0, where it returns bob which does not exists -> error
+    +     if(x == 0){
+    +         return(bob)
+    +     }else{
+    +         print(x)
+    +     }
+    + }
+    > fun2 <- function(x){fun1(x)} # # creation of the fun2() function which uses fun1()
+    > for(x in 3:0){ # loop that print the value 3 to 0 using fun2(). The error message does not mention that fun2(x) generated the error in the loop
+    +     fun2(x)
+    + }
+    [1] 3
+    [1] 2
+    [1] 1
+    Error in fun1(x) : object 'bob' not found
+    ```
 
 The safer project gathers R functions of class S3 with a similar encoding that better controls their expected behavior.
 
