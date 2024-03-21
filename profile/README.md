@@ -70,7 +70,7 @@ The safer project gathers R functions of class S3 with a similar encoding that b
 Functions of class S3 from the safer project present the same encoding structure before the 'main' code section, which tackle the aspects described above, including:
 - Reproducibility
     - Package systematically indicated for any used function (R Scope seeking non authorized). Example `base::paste()` instead of `paste()`.
-    - Argument `safer_check` added, that checks 1) the presence in local R library folders of all the functions and corresponding packages used in the code and 2) that all these functions and classical R operators (`<-`, `(`, etc.) are not overwritten by other packages, always preceding the base R items in the R scope.
+    - Argument `safer_check` added, that checks 1) the presence in local R library folders of all the non basic functions and corresponding packages used in the code and 2) that all the classical R operators (`<-`, `(`, etc.) are not overwritten by other packages, since these packages always preceed the base R items in the R scope. Basic functions of R can be overwritten by other packages, since safer functions use the `::` writting for all functions, thus controlling the R scope.
     - Seeding of the random number generator by protecting potential seeding in the global environment.
 - Intuitiveness
     - Argument `...` not authorized.
