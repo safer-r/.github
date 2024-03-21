@@ -1,2 +1,0 @@
-Another example of problem :
-paste(c("a", "b"), colapse = "|")
