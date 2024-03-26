@@ -77,7 +77,7 @@ Functions of class S3 from the safer project present the same encoding structure
 - Explicit messages
     - Name of the function and corresponding package returning error and warning messages.
     - All warning messages added in the error message string.
-    - explicit error messages following argument checking if: 
+    - explicit error messages, following argument checking, if: 
         - No values for arguments with no default values.
         - Unexpected class, type, mode, length, restricted values panel, kind of numeric values in addition to the distinction between 'integer' and 'double' (proportion only? Inf values authorized? negative values authorized?).
         - Unauthorized `NA` (among other values or as unique value).
