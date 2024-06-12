@@ -91,3 +91,4 @@ Functions of class S3 from the safer project present the same encoding structure
 - [saferGraph](https://github.com/safer-r/saferGraph): classical graphic handling.
 - [saferTool](https://github.com/safer-r/saferTool): basic tools.
 - [saferTool2](https://github.com/safer-r/saferTool2): sophisticated tools.
+
