@@ -7,22 +7,31 @@
 [R](https://www.r-project.org) is a permissive programming language: it will 'try to work' in many situations and returns something, when other programming languages would have returned an error. This advantage partly explains its success, as it is commonly used by non programers. But it comes with several problems which could soften reproducibility or consistency aspects:
 - Non intuitive behaviors. Example of the [`sample()`](http://127.0.0.1:25073/library/base/html/sample.html) function:
     ```
-    > set.seed(16)
-    > y <- sample(1:10, size = 1) # select a single value among integers 1 to 10
-    > y
+    set.seed(16)
+    y <- sample(1:10, size = 1) # select a single value among integers 1 to 10
+    y
+    ```
+    <pre>
     [1] 1
-    
-    > z <- sample(1:10, size = 1) # select a single value among integers 1 to 10
-    > z
+    </pre>
+    ```
+    z <- sample(1:10, size = 1) # select a single value among integers 1 to 10
+    z
+    ```
+    <pre>
     [1] 8
-    
-    > sample(y, size = 2) # select 2 values among the single value 1: the error result is intuitive
+    </pre>
+    ```
+    sample(y, size = 2) # select 2 values among the single value 1: the error result is intuitive
+    ```
     Error in sample.int(x, size, replace, prob) : 
     cannot take a sample larger than the population when 'replace = FALSE'
-    
-    > sample(z, size = 2) # select 2 values among the single value 8: the result is non intuitive, with no warning message
-    [1] 4 6
     ```
+    sample(z, size = 2) # select 2 values among the single value 8: the result is non intuitive, with no warning message
+    ```
+    <pre>
+    [1] 4 6
+    </pre>
 - Lack of control of the arguments of functions or presence of the `...` argument in functions. Example with the `sum()` or `paste()` functions:
     ```
     > sum(1, 2, na.rm = TRUE) # sum of the value 1 and 2 with the use of the argument na.rm = TRUE, which removes any NA before summing.
