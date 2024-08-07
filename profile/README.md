@@ -6,6 +6,7 @@
 
 [R](https://www.r-project.org) is a permissive programming language: it will 'try to work' in many situations and returns something, when other programming languages would have returned an error. This advantage partly explains its success, as it is commonly used by non programers. But it comes with several problems which could soften reproducibility or consistency aspects:
 - **Non intuitive behaviors.**
+
     Example with the `sample()` function:
     ```
     set.seed(16)
@@ -26,6 +27,7 @@
     The result is non intuitive, with no warning message.
 <br /><br />
 - **Lack of control of the arguments of functions or presence of the `...` argument in functions.**
+
     Example with the `sum()` or `paste()` functions:
     ```
     sum(1, 2, na.rm = TRUE) # sum of the value 1 and 2 with the use of the argument na.rm = TRUE, which removes any NA before summing
@@ -51,6 +53,7 @@
     Another example with the `range()` function [`here`](https://bugs.r-project.org/show_bug.cgi?id=17654).
 <br /><br />
 - **Weak control of objects with identical names in the R scope.**
+
     Example:
     ```
     mean <- function(...){sum(...)}
@@ -87,9 +90,9 @@
     suppressMessages(library(dplyr))
     suppressMessages(library(plyr))
     ```
-    
-<br /><br />
+
 - **Lack of explicit error messages.**
+
     Example:
     ```
     fun1 <- function(x){ # creation of the fun1() function which returns the value of the input x, except if x == 0, where it returns bob which does not exists -> error
