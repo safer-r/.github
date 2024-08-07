@@ -8,28 +8,21 @@
 - Non intuitive behaviors. Example of the [`sample()`](http://127.0.0.1:25073/library/base/html/sample.html) function:
     ```
     set.seed(16)
-    y <- sample(1:10, size = 1) # select a single value among integers 1 to 10
-    y
+    sample(1:10, size = 1) # select a single value among integers 1 to 10
     ```
-    <pre>
-    [1] 1
-    </pre>
+    <pre>[1] 1</pre>
+    This result is intuitive: a single value has been chosen between 1 and 10. Another intuitive example:
     ```
-    z <- sample(1:10, size = 1) # select a single value among integers 1 to 10
-    z
+    sample(1, size = 2) # select 2 values among the single value 1
     ```
-    <pre>[1] 8</pre>
+    <pre>Error in sample.int(x, size, replace, prob) : 
+    cannot take a sample larger than the population when 'replace = FALSE'</pre>
+    The error message is intuitive. However, with this example:
     ```
-    sample(y, size = 2) # select 2 values among the single value 1: the error result is intuitive
+    sample(8, size = 2) # select 2 values among the single value 8
     ```
-    Error in sample.int(x, size, replace, prob) : 
-    cannot take a sample larger than the population when 'replace = FALSE'
-    ```
-    sample(z, size = 2) # select 2 values among the single value 8: the result is non intuitive, with no warning message
-    ```
-    <pre>
-    [1] 4 6
-    </pre>
+    <pre>[1] 4 6</pre>
+    The result is non intuitive, with no warning message.
 - Lack of control of the arguments of functions or presence of the `...` argument in functions. Example with the `sum()` or `paste()` functions:
     ```
     > sum(1, 2, na.rm = TRUE) # sum of the value 1 and 2 with the use of the argument na.rm = TRUE, which removes any NA before summing.
