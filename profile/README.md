@@ -69,8 +69,9 @@
     fun2(0)
     ```
     <pre>Error in fun1(x) : object 'bob' not found</pre>
-    The error message does not mention that fun2(x) generated the error.
+    The error message does not mention that `fun2(x)` generated the error.
 <br /><br />
+
 The safer project gathers R functions of class S3 with a similar encoding that better controls their expected behavior.
 <br /><br />
 ## Features of the safer functions
