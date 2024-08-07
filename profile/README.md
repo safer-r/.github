@@ -76,10 +76,10 @@
     ```
     <pre># A tibble: 2 × 3
       group  avg1  avg2
-      \<chr\> \<dbl\> \<dbl\>
+      <chr> <dbl> <dbl>
     1 C1        1     2
     2 C2        1     2</pre>
-    Indeed, 2 differents functions with the same name `summarize()` exist in the *dplyr* and *plyr* packages. Dramatically, the one used by default is the one from the last imported package, here *plyr*, emphazising that a result in R can depend on the order of the imported packages. A message following `library(dplyr) ; library(plyr)` is displayed, but such messages are frequently removed in scripts:
+    Indeed, two differents functions with the same name `summarize()` exist in the *dplyr* and *plyr* packages. Dramatically, the one used by default is the one from the last imported package, here *plyr*, emphazising that a result in R can depend on the order of the imported packages. A message following `library(dplyr) ; library(plyr)` is displayed, but such messages are frequently removed in scripts:
     ```
     suppressMessages(library(dplyr))
     suppressMessages(library(plyr))
