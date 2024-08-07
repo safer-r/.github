@@ -10,7 +10,7 @@
     set.seed(16)
     sample(1:10, size = 1) # select a single value among integers 1 to 10
     ```
-    `[1] 1`
+    <pre>[1] 1</pre>
     This result is intuitive: a single value has been chosen between 1 and 10. Another intuitive example:
     ```
     sample(1, size = 2) # select 2 values among the single value 1
@@ -26,46 +26,53 @@
 <br /><br />
 - Lack of control of the arguments of functions or presence of the `...` argument in functions. Example with the `sum()` or `paste()` functions:
     ```
-    > sum(1, 2, na.rm = TRUE) # sum of the value 1 and 2 with the use of the argument na.rm = TRUE, which removes any NA before summing.
-    [1] 3
-    
-    > sum(1, 2, na.rn = TRUE) # the returned result, with no warning message, is non intuitive for a non informatician
-    [1] 4
-    
-    > paste(c("a", "b"), collapse = "|") # collapse of the two strings "a" and "b" with "|" as separator
-    [1] "a|b"
-    
-    > paste(c("a", "b"), colapse = "|") # the returned result, with no warning message, is non intuitive for a non informatician
-    [1] "a |" "b |"
+    sum(1, 2, na.rm = TRUE) # sum of the value 1 and 2 with the use of the argument na.rm = TRUE, which removes any NA before summing
     ```
+    <pre>[1] 3</pre>
+    This result is the one expected. However, with this example:
+    ```
+    sum(1, 2, na.rn = TRUE) # na.rm replaced by na.rn (typo)
+    ```
+    <pre>[1] 4</pre>
+     The returned result, with no warning message, is non intuitive for a non informatician. Another example with `paste()`:
+    ```
+    paste(c("a", "b"), collapse = "|") # collapse of the two strings "a" and "b" with "|" as separator
+    ```
+    <pre>[1] "a|b"</pre>
+    This result is the one expected. However, with this example:
+    ```
+    paste(c("a", "b"), colapse = "|") # collapse replaced by colapse (typo)
+    ```
+    <pre>[1] "a |" "b |"</pre>
+    The returned result, with no warning message, is non intuitive for a non informatician.
+    <br />
     Another example with the [`range()`](https://bugs.r-project.org/show_bug.cgi?id=17654) function.
+<br /><br />
 - Weak control of objects with identical names in the R scope. Example:
     ```
-    > mean <- function(...){sum(...)}
-    > mean(1, 2) # the mean() function exists in R. But the new mean() function created is used with no warning message
-    [1] 3
+    mean <- function(...){sum(...)}
+    mean(1, 2)
     ```
+    <pre>[1] 3</pre>
+     The `mean()` function exists in R. But the new `mean()` function created is used with no warning message.
+<br /><br />
 - Lack of explicit error messages. Example:
     ```
-    > fun1 <- function(x){ # creation of the a() function which returns the value of the input x, except if x == 0, where it returns bob which does not exists -> error
-    +     if(x == 0){
-    +         return(bob)
-    +     }else{
-    +         print(x)
-    +     }
-    + }
-    > fun2 <- function(x){fun1(x)} # # creation of the fun2() function which uses fun1()
-    > for(x in 3:0){ # loop that print the value 3 to 0 using fun2(). The error message does not mention that fun2(x) generated the error in the loop
-    +     fun2(x)
-    + }
-    [1] 3
-    [1] 2
-    [1] 1
-    Error in fun1(x) : object 'bob' not found
+    fun1 <- function(x){ # creation of the fun1() function which returns the value of the input x, except if x == 0, where it returns bob which does not exists -> error
+        if(x == 0){
+            return(bob)
+        }else{
+            print(x)
+        }
+    }
+    fun2 <- function(x){fun1(x)} # # creation of the fun2() function which uses fun1()
+    fun2(0)
     ```
-
+    <pre>Error in fun1(x) : object 'bob' not found</pre>
+    The error message does not mention that fun2(x) generated the error.
+<br /><br />
 The safer project gathers R functions of class S3 with a similar encoding that better controls their expected behavior.
-
+<br /><br />
 ## Features of the safer functions
 
 Functions of class S3 from the safer project present the same encoding structure before the 'main' code section, which tackle the aspects described above, including:
@@ -84,7 +91,7 @@ Functions of class S3 from the safer project present the same encoding structure
         - Unauthorized `NA` (among other values or as unique value).
         - Unauthorized `NULL` value.
         - Unexpected structure of complex objects, like data frames and lists.
-
+<br /><br />
 ## safer Packages
 
 - [saferDev](https://github.com/safer-r/saferDev): R function and pipeline development.
