@@ -10,7 +10,7 @@
     set.seed(16)
     sample(1:10, size = 1) # select a single value among integers 1 to 10
     ```
-    <pre>[1] 1</pre>
+    `[1] 1`
     This result is intuitive: a single value has been chosen between 1 and 10. Another intuitive example:
     ```
     sample(1, size = 2) # select 2 values among the single value 1
@@ -23,6 +23,7 @@
     ```
     <pre>[1] 4 6</pre>
     The result is non intuitive, with no warning message.
+<br /><br />
 - Lack of control of the arguments of functions or presence of the `...` argument in functions. Example with the `sum()` or `paste()` functions:
     ```
     > sum(1, 2, na.rm = TRUE) # sum of the value 1 and 2 with the use of the argument na.rm = TRUE, which removes any NA before summing.
