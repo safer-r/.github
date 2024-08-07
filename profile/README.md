@@ -5,7 +5,7 @@
 ## Why the safer project?
 
 [R](https://www.r-project.org) is a permissive programming language: it will 'try to work' in many situations and returns something, when other programming languages would have returned an error. This advantage partly explains its success, as it is commonly used by non programers. But it comes with several problems which could soften reproducibility or consistency aspects:
-- Non intuitive behaviors. Example of the [`sample()`](http://127.0.0.1:25073/library/base/html/sample.html) function:
+- Non intuitive behaviors. Example with the `sample()` function:
     ```
     set.seed(16)
     sample(1:10, size = 1) # select a single value among integers 1 to 10
@@ -46,7 +46,7 @@
     <pre>[1] "a |" "b |"</pre>
     The returned result, with no warning message, is non intuitive for a non informatician.
     <br />
-    Another example with the [`range()`](https://bugs.r-project.org/show_bug.cgi?id=17654) function.
+    Another example with the `range()` function [`here`](https://bugs.r-project.org/show_bug.cgi?id=17654).
 <br /><br />
 - Weak control of objects with identical names in the R scope. Example:
     ```
