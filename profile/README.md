@@ -18,9 +18,7 @@
     z <- sample(1:10, size = 1) # select a single value among integers 1 to 10
     z
     ```
-    <pre>
-    [1] 8
-    </pre>
+    <pre>[1] 8</pre>
     ```
     sample(y, size = 2) # select 2 values among the single value 1: the error result is intuitive
     ```
