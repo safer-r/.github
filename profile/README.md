@@ -28,7 +28,7 @@
 <br /><br />
 - **Lack of control of the arguments of functions or presence of the `...` argument in functions.**
 
-    Example with the `sum()` or `paste()` functions:
+    Example with the `sum()` function:
     ```
     sum(1, 2, na.rm = TRUE) # sum of the value 1 and 2 with the use of the argument na.rm = TRUE, which removes any NA before summing
     ```
@@ -38,7 +38,9 @@
     sum(1, 2, na.rn = TRUE) # na.rm replaced by na.rn (typo)
     ```
     <pre>[1] 4</pre>
-     The returned result, with no warning message, is non intuitive for a non informatician. Another example with `paste()`:
+     The returned result, with no warning message, is non intuitive for a non informatician.
+
+    Another example with `paste()`:
     ```
     paste(c("a", "b"), collapse = "|") # collapse of the two strings "a" and "b" with "|" as separator
     ```
@@ -49,7 +51,7 @@
     ```
     <pre>[1] "a |" "b |"</pre>
     The returned result, with no warning message, is non intuitive for a non informatician.
-    <br />
+
     Another example with the `range()` function [`here`](https://bugs.r-project.org/show_bug.cgi?id=17654).
 <br /><br />
 - **Weak control of objects with identical names in the R scope.**
@@ -60,7 +62,9 @@
     mean(1, 2)
     ```
     <pre>[1] 3</pre>
-     The `mean()` function exists in R. But the new `mean()` function created is used with no warning message. Another example with the order of imported packages:
+     The `mean()` function exists in R. But the new `mean()` function created is used with no warning message.
+
+    Another example with the order of imported packages:
     ```
     library(dplyr)
     library(plyr)
@@ -137,4 +141,4 @@ Functions of class S3 from the safer project present the same encoding structure
 - [saferGraph](https://github.com/safer-r/saferGraph): classical graphic handling.
 - [saferTool](https://github.com/safer-r/saferTool): basic tools.
 - [saferTool2](https://github.com/safer-r/saferTool2): sophisticated tools.
-
+- [ggcute](https://github.com/safer-r/ggcute): ggplot2 graphics.
