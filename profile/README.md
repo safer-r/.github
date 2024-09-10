@@ -122,7 +122,7 @@ Functions of class S3 from the safer project present the same encoding structure
     - Package systematically indicated for any used function (R Scope seeking non authorized). Example `base::paste()` instead of `paste()`.
     - All the arguments of functions written, even if default values are used, to prevent argument name change or default value change (like the `stringsAsFactors` argument of `read.table()`, for which default value changed from TRUE to FALSE since R version 4.0). Example `base::sum(1:3, na.rm = FALSE)` instead of `base::sum(1:3)`.
     - Argument `safer_check` added, that checks 1) the presence in local R library folders of all the non basic functions and corresponding packages used in the code and 2) that all the classical R operators (`<-`, `(`, etc.) are not overwritten by other packages, since these packages always preceed the base R items in the R scope. Basic functions of R can be overwritten by other packages, since safer functions use the `::` writting for all functions, thus controlling the R scope.
-    - Seeding of the random number generator by protecting potential seeding in the global environment.
+    - Seeding of the random number generator using an argument each time randomness is used, and protecting potential seeding in the global environment.
 - Intuitiveness
     - Argument `...` not authorized.
 - Explicit messages
@@ -143,3 +143,4 @@ Functions of class S3 from the safer project present the same encoding structure
 - [saferTool](https://github.com/safer-r/saferTool): basic tools.
 - [saferTool2](https://github.com/safer-r/saferTool2): sophisticated tools.
 - [saferGG](https://github.com/safer-r/saferGG): ggplot2 graphics.
+
