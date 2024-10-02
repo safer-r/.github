@@ -25,10 +25,10 @@ a <- function(){
     ######## check of lib.path
     if( ! base::is.null(lib.path)){
         if( ! base::all(base::typeof(lib.path) == "character")){ # no na.rm = TRUE with typeof
-            tempo.cat <- base::paste0("ERROR IN ", function.name, " OF THE ", package.name, " PACKAGE\nDIRECTORY PATH INDICATED IN THE lib.path ARGUMENT MUST BE A VECTOR OF CHARACTERS:\n", base::paste(lib.path, collapse = "\n", recycle0 = FALSE))
+            tempo.cat <- base::paste0("ERROR IN ", function.name, " OF THE ", package.name, " PACKAGE\nDIRECTORY PATH INDICATED IN THE lib.path ARGUMENT MUST BE A VECTOR OF CHARACTERS:\n", base::paste(lib.path, sep = " ", collapse = "\n", recycle0 = FALSE))
             base::stop(base::paste0("\n\n================\n\n", tempo.cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE) # == in base::stop() to be able to add several messages between ==
         }else if( ! base::all(base::dir.exists(lib.path), na.rm = TRUE)){ # separation to avoid the problem of tempo$problem == FALSE and lib.path == NA
-            tempo.cat <- base::paste0("ERROR IN ", function.name, " OF THE ", package.name, " PACKAGE\nDIRECTORY PATH INDICATED IN THE lib.path ARGUMENT DOES NOT EXISTS:\n", base::paste(lib.path, collapse = "\n", recycle0 = FALSE))
+            tempo.cat <- base::paste0("ERROR IN ", function.name, " OF THE ", package.name, " PACKAGE\nDIRECTORY PATH INDICATED IN THE lib.path ARGUMENT DOES NOT EXISTS:\n", base::paste(lib.path, sep = " ", collapse = "\n", recycle0 = FALSE))
            base::stop(base::paste0("\n\n================\n\n", tempo.cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE) # == in base::stop() to be able to add several messages between ==
         }else{
             base:::.libPaths(new = base::sub(x = lib.path, pattern = "/$|\\\\$", replacement = "")) # base:::.libPaths(new = ) add path to default path. BEWARE: base:::.libPaths() does not support / at the end of a submitted path. Thus check and replace last / or \\ in path
@@ -77,7 +77,7 @@ a <- function(){
     tempo <- saferDev::arg_check(data = safer_check, class = "vector", typeof = "logical", length = 1, fun.name = function.name, safer_check = FALSE) ; base::eval(ee) # even if already used above
     if( ! base::is.null(argum.check)){
         if(base::any(argum.check, na.rm = TRUE)){
-            base::stop(base::paste0("\n\n================\n\n", base::paste(text.check[argum.check], collapse = "\n", recycle0 = FALSE), "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE)
+            base::stop(base::paste0("\n\n================\n\n", base::paste(text.check[argum.check], sep = " ", collapse = "\n", recycle0 = FALSE), "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE)
         }
     }
     # check with r_debugging_tools
@@ -166,7 +166,7 @@ a <- function(){
     }
     if( ! base::is.null(lib.path)){
         if( ! base::all(base::dir.exists(lib.path), na.rm = TRUE)){ # separation to avoid the problem of tempo$problem == FALSE and lib.path == NA
-            tempo.cat <- base::paste0("ERROR IN ", function.name, " OF THE ", package.name, " PACKAGE\nDIRECTORY PATH INDICATED IN THE lib.path ARGUMENT DOES NOT EXISTS:\n", base::paste(lib.path, collapse = "\n", recycle0 = FALSE), collapse = NULL, recycle0 = FALSE)
+            tempo.cat <- base::paste0("ERROR IN ", function.name, " OF THE ", package.name, " PACKAGE\nDIRECTORY PATH INDICATED IN THE lib.path ARGUMENT DOES NOT EXISTS:\n", base::paste(lib.path, sep = " ", collapse = "\n", recycle0 = FALSE), collapse = NULL, recycle0 = FALSE)
             base::stop(base::paste0("\n\n================\n\n", tempo.cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE)
         }
     }
@@ -181,7 +181,7 @@ a <- function(){
     ######## end warning
     ######## reserved word checking
     if(base::any(base::names(data1[[i1]]) %in% reserved.words)){
-        tempo.cat <- base::paste0("ERROR IN ", function.name, " OF THE ", package.name, " PACKAGE\nCOLUMN NAMES OF ", base::ifelse(base::length(data1) == 1, "data1", base::paste0("data1 NUMBER ", i1)), " ARGUMENT CANNOT BE ONE OF THESE WORDS\n", base::paste(reserved.words, collapse = " ", recycle0 = FALSE), "\nTHESE ARE RESERVED FOR THE ", function.name, " FUNCTION", collapse = NULL, recycle0 = FALSE)
+        tempo.cat <- base::paste0("ERROR IN ", function.name, " OF THE ", package.name, " PACKAGE\nCOLUMN NAMES OF ", base::ifelse(base::length(data1) == 1, "data1", base::paste0("data1 NUMBER ", i1)), " ARGUMENT CANNOT BE ONE OF THESE WORDS\n", base::paste(reserved.words, sep = " ", collapse = " ", recycle0 = FALSE), "\nTHESE ARE RESERVED FOR THE ", function.name, " FUNCTION", collapse = NULL, recycle0 = FALSE)
         base::stop(base::paste0("\n\n================\n\n", tempo.cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE)
     }
     ######## end reserved word checking
