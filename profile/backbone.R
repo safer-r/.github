@@ -4,7 +4,7 @@ BACKBONE <- function(){
     #### end package name
 
     #### function name
-    tempo_args <- base::as.list(x = base::match.call(definition = base::sys.function(which = base::sys.parent(n = 1L)), call = base::sys.call(which = base::sys.parent(n = 1L)), expand.dots = FALSE, envir = base::parent.frame(n = 2L)))
+    tempo_args <- base::as.list(x = base::match.call(definition = base::sys.function(which = base::sys.parent(n = 0)), call = base::sys.call(which = base::sys.parent(n = 0)), expand.dots = FALSE, envir = base::parent.frame(n = 2L))) # warning: I have written n = 0 to avoid error when a safer function is inside another functions
     function.name <- base::paste0(tempo_args[[1]], "()", collapse = NULL, recycle0 = FALSE) # function name with "()" paste, which split into a vector of three: c("::()", "package ()", "function ()") if "package::function()" is used.
     if(function.name[1] == "::()" | function.name[1] == ":::()"){
         function.name <- function.name[3]
