@@ -153,16 +153,6 @@ BACKBONE <- function(data, lib_path = NULL, seed_value_arg, safer_check = TRUE){
     reserved_words <- base::c("fake_x", "fake_y", "fake_categ", "color")
     ######## end reserved words (to avoid bugs)
 
-    ######## new environment
-    env.name <- base::paste0("env", base::as.numeric(x = base::Sys.time()), collapse = NULL, recycle0 = FALSE)
-    if(base::exists(x = env.name, where = -1, envir = if(base::missing(x = frame)){base::as.environment(x = where)}else{base::sys.frame(which = frame)}, frame = , mode = "any", inherits = TRUE)){ # verify if still ok when info() is inside a function
-        tempo.cat <- base::paste0("ERROR IN ", function_name, base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(" OF THE ", package_name, " PACKAGE", collapse = NULL, recycle0 = FALSE)), "\nENVIRONMENT env.name ALREADY EXISTS. PLEASE RERUN ONCE", collapse = NULL, recycle0 = FALSE)
-        base::stop(base::paste0("\n\n================\n\n", tempo.cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) # == in base::stop() to be able to add several messages between ==
-    }else{
-        base::assign(x = env.name, value = base::new.env(hash = TRUE, parent = base::parent.frame(n = 1), size = 29L), pos = -1, envir = base::as.environment(x = pos), inherits = FALSE, immediate = TRUE)
-    }
-    ######## end new environment
-
     ######## code that protects set.seed() in the global environment
     if (base::exists(x = ".Random.seed", where = -1, envir = .GlobalEnv, frame = , mode = "any", inherits = TRUE)) {
         # if .Random.seed does not exists, it means that no random operation has been performed yet in any R environment
