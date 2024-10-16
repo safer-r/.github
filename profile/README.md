@@ -135,6 +135,16 @@ Functions of class S3 from the safer project present the same encoding structure
         - Unauthorized `NULL` value.
         - Unexpected structure of complex objects, like data frames and lists.
 <br /><br />
+## Make a safer functions
+
+- Recover the [Backbone.R code](https://github.com/safer-r/.github/tree/main/profile).
+- Follow the instructions [here](https://gael-millot.github.io/protocols/docs/Protocol%20167-rev0%20BACKBONE%20OF%20SAFER%20R%20FUNCTIONS.htm).
+- Warning: all the safer functions inside another safer function must have the safer_ckeck argument set to FALSE, to avoid repetitive checkings that would expotnetially increase the function execution time.
+<br /><br />
+## Make a safer script
+
+- Could this script be written as a function?
+<br /><br />
 ## safer Packages
 
 - [saferDev](https://github.com/safer-r/saferDev): R function and pipeline development.

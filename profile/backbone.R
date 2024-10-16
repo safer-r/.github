@@ -1,4 +1,4 @@
-BACKBONE <- function(data, lib_path = NULL, seed_value_arg, safer_check = TRUE){ 
+BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE){ 
 
     #### package name
     package_name <- "saferDev" # write NULL if the function developed is not in a package
@@ -40,7 +40,7 @@ BACKBONE <- function(data, lib_path = NULL, seed_value_arg, safer_check = TRUE){
             base::stop(base::paste0("\n\n================\n\n", tempo.cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) # == in base::stop() to be able to add several messages between ==
         }else if( ! base::all(base::dir.exists(paths = lib_path), na.rm = TRUE)){ # separation to avoid the problem of tempo$problem == FALSE and lib_path == NA
             tempo.cat <- base::paste0("ERROR IN ", function_name, base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(" OF THE ", package_name, " PACKAGE", collapse = NULL, recycle0 = FALSE)), "\nDIRECTORY PATH INDICATED IN THE lib_path ARGUMENT DOES NOT EXISTS:\n", base::paste(lib_path, sep = " ", collapse = "\n", recycle0 = FALSE), collapse = NULL, recycle0 = FALSE)
-           base::stop(base::paste0("\n\n================\n\n", tempo.cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) # == in base::stop() to be able to add several messages between ==
+            base::stop(base::paste0("\n\n================\n\n", tempo.cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) # == in base::stop() to be able to add several messages between ==
         }else{
             base:::.libPaths(new = base::sub(x = lib_path, pattern = "/$|\\\\$", replacement = "", ignore.case = FALSE, perl = FALSE, fixed = FALSE, useBytes = FALSE), include.site = TRUE) # base:::.libPaths(new = ) add path to default path. BEWARE: base:::.libPaths() does not support / at the end of a submitted path. Thus check and replace last / or \\ in path
             lib_path <- base:::.libPaths(new = , include.site = TRUE)
@@ -85,8 +85,8 @@ BACKBONE <- function(data, lib_path = NULL, seed_value_arg, safer_check = TRUE){
     checked.arg.names <- NULL # for function debbuging: used by r_debugging_tools
     ee <- base::expression(argum.check <- base::c(argum.check, tempo$problem) , text.check <- base::c(text.check, tempo$text) , checked.arg.names <- base::c(checked.arg.names, tempo$object.name))
     tempo <- saferDev::arg_check(data = data, class = NULL, typeof = NULL, mode = "numeric", length = NULL, prop = FALSE, double.as.integer.allowed = FALSE, options = NULL, all.options.in.data = FALSE, na.contain = TRUE, neg.values = TRUE, inf.values = TRUE, print = FALSE, data.name = NULL, fun.name = function_name, safer_check = FALSE) ; base::eval(expr = ee, envir = base::environment(fun = NULL), enclos = base::environment(fun = NULL)) # copy - paste this line as much as necessary
-    if( ! base::is.null(x = path_out)){ # for all arguments that can be NULL, write like this:
-        tempo <- saferDev::arg_check(data = path_out, class = "vector", typeof = NULL, mode = "character", length = NULL, prop = FALSE, double.as.integer.allowed = FALSE, options = NULL, all.options.in.data = FALSE, na.contain = TRUE, neg.values = TRUE, inf.values = TRUE, print = FALSE, data.name = NULL, fun.name = function_name, safer_check = FALSE) ; base::eval(expr = ee, envir = base::environment(fun = NULL), enclos = base::environment(fun = NULL))
+    if( ! base::is.null(x = seed)){ # for all arguments that can be NULL, write like this:
+        tempo <- saferDev::arg_check(data = seed, class = "vector", typeof = "integer", mode = NULL, length = NULL, prop = FALSE, double.as.integer.allowed = TRUE, options = NULL, all.options.in.data = FALSE, na.contain = FALSE, neg.values = TRUE, inf.values = FALSE, print = FALSE, data.name = NULL, fun.name = function_name, safer_check = FALSE) ; base::eval(expr = ee, envir = base::environment(fun = NULL), enclos = base::environment(fun = NULL))
     }
     # lib_path already checked above
     tempo <- saferDev::arg_check(data = safer_check, class = "vector", typeof = "logical", mode = NULL, length = 1, prop = FALSE, double.as.integer.allowed = FALSE, options = NULL, all.options.in.data = FALSE, na.contain = FALSE, neg.values = TRUE, inf.values = TRUE, print = FALSE, data.name = NULL, fun.name = function_name, safer_check = FALSE) ; base::eval(expr = ee, envir = base::environment(fun = NULL), enclos = base::environment(fun = NULL)) # rechecked even if already used above 
@@ -113,12 +113,9 @@ BACKBONE <- function(data, lib_path = NULL, seed_value_arg, safer_check = TRUE){
 
     ######## management of NULL arguments
     tempo.arg <-base::c(
-        "x", 
-        "export", 
-        "path_out", 
-        "df_name", 
-        "overwrite", 
-        # "lib_path", # because can be NULL
+        "data", 
+        # "lib.path", # inactivated because can be NULL
+        # "seed", # inactivated because can be null 
         "safer_check"
     )
     tempo.log <- base::sapply( X = base::lapply(X = tempo.arg, FUN = function(x){base::get(x = x, pos = -1L, envir = base::parent.frame(n = 2), mode = "any", inherits = FALSE)}), FUN = function(x){base::is.null(x = x)}, simplify = TRUE, USE.NAMES = TRUE) # parent.frame(n = 2) because sapply(lapply())
@@ -149,19 +146,20 @@ BACKBONE <- function(data, lib_path = NULL, seed_value_arg, safer_check = TRUE){
 
     #### second round of checking and data preparation
 
-    ######## reserved words (to avoid bugs)
+    ######## reserved words
     reserved_words <- base::c("fake_x", "fake_y", "fake_categ", "color")
-    ######## end reserved words (to avoid bugs)
+    ######## end reserved words
 
     ######## code that protects set.seed() in the global environment
+    # Warning: seeding is always at the .GlobalEnv level, whenever the seeding is applied inside a function, another envir, etc.
     if (base::exists(x = ".Random.seed", where = -1, envir = .GlobalEnv, frame = , mode = "any", inherits = TRUE)) {
         # if .Random.seed does not exists, it means that no random operation has been performed yet in any R environment
         tempo.random.seed <- .Random.seed
         base::on.exit(expr = base::assign(x = ".Random.seed", value = tempo.random.seed, pos = -1, envir = .GlobalEnv, inherits = FALSE, immediate = TRUE), add = FALSE, after = TRUE)
-    } else{
+    }else{
         base::on.exit(expr = base::set.seed(seed = NULL, kind = NULL, normal.kind = NULL, sample.kind = NULL), add = FALSE, after = TRUE) # inactivate seeding -> return to complete randomness
     }
-    base::set.seed(seed = seed_value_arg, kind = NULL, normal.kind = NULL, sample.kind = NULL) # seed_value argument of the function
+    base::set.seed(seed = seed, kind = NULL, normal.kind = NULL, sample.kind = NULL) # seed value is the seed argument of the function
     ######## end code that protects set.seed() in the global environment
 
     ######## warning initiation
@@ -213,7 +211,7 @@ BACKBONE <- function(data, lib_path = NULL, seed_value_arg, safer_check = TRUE){
     #### warning output
     if( ! base::is.null(x = warn)){
         base::on.exit(expr = base::warning(base::paste0("FROM ", function_name, base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(" OF THE ", package_name, " PACKAGE", collapse = NULL, recycle0 = FALSE)), "\n\n", warn, collapse = NULL, recycle0 = FALSE), call. = FALSE, immediate. = FALSE, noBreaks. = FALSE, domain = NULL), add = FALSE, after = TRUE)
-      }
-      base::on.exit(expr = base::options(warning.length = ini.warning.length), add = TRUE, after = TRUE)
+        }
+        base::on.exit(expr = base::options(warning.length = ini.warning.length), add = TRUE, after = TRUE)
     #### end warning output
 }
