@@ -126,26 +126,29 @@ Functions of class S3 from the safer project present the same encoding structure
 - Intuitiveness
     - Argument `...` not authorized.
 - Explicit messages
-    - Name of the function and corresponding package returning error and warning messages.
+    - Name of the function and corresponding package in all error and warning messages.
     - All warning messages added in the error message string.
     - explicit error messages, following argument checking, if: 
         - No values for arguments with no default values.
         - Unexpected class, type, mode, length, restricted values panel, kind of numeric values in addition to the distinction between 'integer' and 'double' (proportion only? Inf values authorized? negative values authorized?).
         - Unauthorized `NA` (among other values or as unique value).
         - Unauthorized `NULL` value.
+        - Unauthorized `` value in vector of characters.
         - Unexpected structure of complex objects, like data frames and lists.
 <br /><br />
-## Make a safer functions
+## Make a safer function
 
 - Recover the [Backbone.R code](https://github.com/safer-r/.github/tree/main/profile).
 - Follow the instructions [here](https://gael-millot.github.io/protocols/docs/Protocol%20167-rev0%20BACKBONE%20OF%20SAFER%20R%20FUNCTIONS.htm).
-- Warning: all the safer functions inside another safer function must have the safer_ckeck argument set to FALSE, to avoid repetitive checkings that would expotnetially increase the function execution time.
+- Warning: all the safer functions inside another safer function must have the safer_ckeck argument set to FALSE, to avoid repetitive checkings that would exponentially increase the function execution time.
 <br /><br />
 ## Make a safer script
 
 - Could this script be written as a function?
 <br /><br />
 ## safer Packages
+
+Functions from all these packages use the safer backbone and, thus, respect the criteria of the safer project.
 
 - [saferDev](https://github.com/safer-r/saferDev): R function and pipeline development.
 - [saferMatrix](https://github.com/safer-r/saferMatrix): matrix handling.
