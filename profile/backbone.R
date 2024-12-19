@@ -5,7 +5,7 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE){
     #### end package name
 
     #### internal error report link
-    internal_error_report_link <- paste0("https://github.com/safer-r/", package_name, "/issues/new", collapse = NULL, recycle0 = FALSE) # link where to post an issue because of an internal error. Write NULL if no link to propose
+    internal_error_report_link <- base::paste0("https://github.com/safer-r/", package_name, "/issues/new", collapse = NULL, recycle0 = FALSE) # link where to post an issue because of an internal error. Write NULL if no link to propose
     #### end internal error report link
 
     #### function name
