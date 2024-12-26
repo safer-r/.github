@@ -121,7 +121,7 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE){
     tempo_arg <-base::c(
         "data", 
         # "lib_path", # inactivated because can be NULL
-        # "seed", # inactivated because can be null 
+        # "seed", # inactivated because can be NULL 
         "safer_check"
     )
     tempo_log <- base::sapply( X = base::lapply(X = tempo_arg, FUN = function(x){base::get(x = x, pos = -1L, envir = base::parent.frame(n = 2), mode = "any", inherits = FALSE)}), FUN = function(x){base::is.null(x = x)}, simplify = TRUE, USE.NAMES = TRUE) # parent.frame(n = 2) because sapply(lapply())
