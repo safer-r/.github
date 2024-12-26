@@ -136,7 +136,7 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE){
     )
     tempo_log <- ! base::sapply(X = base::lapply(X = tempo_arg, FUN = function(x){base::get(x = x, pos = -1L, envir = base::parent.frame(n = 2), mode = "any", inherits = FALSE)}), FUN = function(x){if(base::is.null(x = x)){base::return(TRUE)}else{base::all(base::mode(x = x) == "character", na.rm = TRUE)}}, simplify = TRUE, USE.NAMES = TRUE) # parent.frame(n = 2) because sapply(lapply())  # for character argument that can also be NULL, if NULL -> considered as character
     if(base::any(tempo_log, na.rm = TRUE)){
-        tempo_cat <- base::paste0("INTERNAL ERROR IN THE BACKBONE PART OF THE ", function_name, base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(" OF THE ", package_name, " PACKAGE", collapse = NULL, recycle0 = FALSE)), "\n", base::ifelse(test = base::sum(tempo_log, na.rm = TRUE) > 1, yes = "THESE ARGUMENTS ARE", no = "THIS ARGUMENT IS"), " NOT MODE \"character\":\n", base::paste0(tempo_arg[tempo_log], collapse = "\n", recycle0 = FALSE), base::ifelse(test = base::is.null(x = internal_error_report_link), yes = "", no = base::paste0("\n\nPLEASE, REPORT THIS ERROR HERE: ", internal_error_report_link, collapse = NULL, recycle0 = FALSE)), collapse = NULL, recycle0 = FALSE)
+        tempo_cat <- base::paste0("INTERNAL ERROR IN THE BACKBONE PART OF ", function_name, base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(" OF THE ", package_name, " PACKAGE", collapse = NULL, recycle0 = FALSE)), "\n", base::ifelse(test = base::sum(tempo_log, na.rm = TRUE) > 1, yes = "THESE ARGUMENTS ARE", no = "THIS ARGUMENT IS"), " NOT MODE \"character\":\n", base::paste0(tempo_arg[tempo_log], collapse = "\n", recycle0 = FALSE), base::ifelse(test = base::is.null(x = internal_error_report_link), yes = "", no = base::paste0("\n\nPLEASE, REPORT THIS ERROR HERE: ", internal_error_report_link, collapse = NULL, recycle0 = FALSE)), collapse = NULL, recycle0 = FALSE)
         base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) # == in base::stop() to be able to add several messages between ==
     }else{
         tempo_log <- base::sapply(X = base::lapply(X = tempo_arg, FUN = function(x){base::get(x = x, pos = -1L, envir = base::parent.frame(n = 2), mode = "any", inherits = FALSE)}), FUN = function(x){base::any(x == "", na.rm = FALSE)}, simplify = TRUE, USE.NAMES = TRUE) # parent.frame(n = 2) because sapply(lapply())
@@ -173,6 +173,26 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE){
     warn <- NULL
     warn_count <- 0
     ######## end warning initiation
+
+    ######## graphic device checking
+    if(base::length(x = grDevices::dev.list()) > 0){
+        # check the number of graphic devices on exit
+        dev_list <- grDevices::dev.list() 
+        base::on.exit(
+            expr = if(base::length(x = dev_list) != base::length(x = grDevices::dev.list())){
+                tempo_cat <- base::paste0("INTERNAL ERROR IN THE BACKBONE PART OF ", function_name, base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(" OF THE ", package_name, " PACKAGE", collapse = NULL, recycle0 = FALSE)), "\n\nSOME GRAPHIC DEVICES WERE OPENED BY ", function_name, " BUT NOT CLOSED BEFORE END OF EXECUTION\n\nIF IT IS EXPECTED, JUST REMOVE THE CODE DISPLAYING THIS MESSAGE INSIDE ", function_name, "\n\nOTHERWISE, THE PROBLEM COMES FROM OPENED GRAPHIC DEVICES BEFORE RUNNING ", function_name, ":\n", base::paste0(dev_list, collapse = " ", recycle0 = FALSE), "\nAND AFTER:\n", base::paste0(grDevices::dev.list(), collapse = " ", recycle0 = FALSE), base::ifelse(test = base::is.null(x = internal_error_report_link), yes = "", no = base::paste0("\nPLEASE, REPORT THIS ERROR HERE: ", internal_error_report_link, collapse = NULL, recycle0 = FALSE)), collapse = NULL, recycle0 = FALSE)
+                base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) # == in base::stop() to be able to add several messages between ==
+            }, 
+            add = TRUE, 
+            after = TRUE
+        )
+        # end check the number of graphic devices on exit
+        # restore the graphic parameters on exit
+        par_ini <- base::suppressWarnings(expr = graphics::par(no.readonly = TRUE), classes = "warning") # to recover the present graphical parameters
+        base::on.exit(expr = base::suppressWarnings(expr = graphics::par(par_ini, no.readonly = TRUE), classes = "warning"), add = TRUE, after = TRUE)
+        # end restore the graphic parameters on exit
+    }
+    ######## end graphic device checking
 
     ######## other checkings
     if(base::length(x = data) == 0){
