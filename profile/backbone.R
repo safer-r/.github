@@ -5,7 +5,7 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE){
     #### end package name
 
     #### internal error report link
-    internal_error_report_link <- base::paste0("https://github.com/safer-r/", package_name, "/issues/new", collapse = NULL, recycle0 = FALSE) # link where to post an issue indicated in an internal error message. Write NULL if no link to propose or no internal error message
+    internal_error_report_link <- base::paste0("https://github.com/safer-r/", package_name, "/issues/new", collapse = NULL, recycle0 = FALSE) # link where to post an issue indicated in an internal error message. Write NULL if no link to propose or, no internal error message
     #### end internal error report link
 
     #### function name
@@ -63,7 +63,8 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE){
             ),
             lib_path = lib_path, # write NULL if your function does not have any lib_path argument
             external_function_name = function_name,
-            external_package_name = package_name
+            external_package_name = package_name,
+            internal_error_report_link = internal_error_report_link
         )
     }
     ######## end check of the required functions from the required packages
