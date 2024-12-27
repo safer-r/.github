@@ -237,7 +237,7 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
         tempo_log <- base::sapply(X = base::lapply(X = tempo_arg, FUN = function(x){base::get(x = x, pos = -1L, envir = base::parent.frame(n = 2), mode = "any", inherits = FALSE)}), FUN = function(x){base::any(x == "", na.rm = FALSE)}, simplify = TRUE, USE.NAMES = TRUE) # parent.frame(n = 2) because sapply(lapply())
         if(base::any(tempo_log, na.rm = TRUE)){
             tempo_cat <- base::paste0(
-                error_text_start,  
+                error_text_start, 
                 base::ifelse(test = base::sum(tempo_log, na.rm = TRUE) > 1, yes = "THESE ARGUMENTS\n", no = "THIS ARGUMENT\n"), 
                 base::paste0(tempo_arg[tempo_log], collapse = "\n", recycle0 = FALSE),
                 "\nCANNOT CONTAIN EMPTY STRING \"\".", 
