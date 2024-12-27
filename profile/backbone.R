@@ -123,8 +123,8 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
                 "lubridate::seconds_to_period"
             ),
             lib_path = lib_path, # write NULL if your function does not have any lib_path argument
-            external_function_name = function_name,
-            external_package_name = package_name,
+            safer_check = FALSE, # TRUE only when .pack_and_function_check() is not used inside safer function
+            error_text = error_text, 
             internal_error_report_link = internal_error_report_link
         )
     }
