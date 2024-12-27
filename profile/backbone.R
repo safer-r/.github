@@ -22,12 +22,20 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
     arg_names <- base::names(x = base::formals(fun = base::sys.function(which = base::sys.parent(n = 2)), envir = base::parent.frame(n = 1))) # names of all the arguments
     #### end arguments settings
 
-    ######## check of error_text
+    #### error_text initiation
+    # basic error text start
+    error_text_start <- base::paste0(
+        "ERROR IN ", 
+        function_name, 
+        base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(" OF THE ", package_name, " PACKAGE", collapse = NULL, recycle0 = FALSE)), 
+        collapse = NULL, 
+        recycle0 = FALSE
+    )
+    # end basic error text start
+    # check of the error_text argument
     if( ! (base::all(base::typeof(x = error_text) == "character", na.rm = TRUE) & base::length(x = error_text) == 1)){ # no need to test is.null(error_text) because typeof(x = NULL) == "character" returns FALSE
         tempo_cat <- base::paste0(
-            "ERROR IN ", 
-            function_name, 
-            base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(" OF THE ", package_name, " PACKAGE", collapse = NULL, recycle0 = FALSE)), 
+            error_text_start, 
             "\nTHE error_text ARGUMENT MUST BE A SINGLE CHARACTER STRING (CAN BE \"\").\nHERE IT IS:\n", 
             base::paste0(error_text, collapse = "\n", recycle0 = FALSE), 
             collapse = NULL, 
@@ -35,16 +43,34 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
         )
         base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) # == in base::stop() to be able to add several messages between ==
     }
-    ######## end check of error_text
+    # end check of the error_text argument
+    # basic error text start updated
+    error_text_start <- base::paste0(
+        error_text_start, 
+        base::ifelse(test = error_text == "", yes = ".", no = error_text), 
+        "\n\n", 
+        collapse = NULL, 
+        recycle0 = FALSE
+    )
+    # end basic error text start updated
+    # internal error text
+    intern_error_text_start <- base::paste0(
+        function_name, 
+        base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(" OF THE ", package_name, " PACKAGE", collapse = NULL, recycle0 = FALSE)), 
+        base::ifelse(test = error_text == "", yes = ".", no = error_text), 
+        "\n\n", 
+        collapse = NULL, 
+        recycle0 = FALSE
+    )
+    intern_error_text_end <- base::ifelse(test = base::is.null(x = internal_error_report_link), yes = "", no = base::paste0("\n\nPLEASE, REPORT THIS ERROR HERE: ", internal_error_report_link, ".", collapse = NULL, recycle0 = FALSE))
+    # end internal error text
+    #### end error_text initiation
 
     #### critical operator checking
     if( ! (base::all(safer_check %in% base::c(TRUE, FALSE), na.rm = FALSE) & base::length(x = safer_check) == 1 & base::all(base::is.logical(x = safer_check), na.rm = TRUE))){
         tempo_cat <- base::paste0(
-            "ERROR IN ", 
-            function_name, 
-            base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(" OF THE ", package_name, " PACKAGE", collapse = NULL, recycle0 = FALSE)), 
-            base::ifelse(test = error_text == "", yes = ".", no = error_text), 
-            "\nsafer_check ARGUMENT MUST BE EITHER TRUE OR FALSE.\nHER IT IS:\n", 
+            error_text_start, 
+            "safer_check ARGUMENT MUST BE EITHER TRUE OR FALSE.\nHER IT IS:\n", 
             base::paste0(safer_check, collapse = "\n", recycle0 = FALSE), 
             collapse = NULL, 
             recycle0 = FALSE
@@ -65,11 +91,8 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
     if( ! base::is.null(x = lib_path)){
         if( ! base::all(base::typeof(x = lib_path) == "character", na.rm = FALSE)){ # no na.rm = TRUE with typeof
             tempo_cat <- base::paste0(
-                "ERROR IN ", 
-                function_name, 
-                base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(" OF THE ", package_name, " PACKAGE", collapse = NULL, recycle0 = FALSE)), 
-                base::ifelse(test = error_text == "", yes = ".", no = error_text), 
-                "\nDIRECTORY PATH INDICATED IN THE lib_path ARGUMENT MUST BE A VECTOR OF CHARACTERS.\nHERE IT IS:\n", 
+                error_text_start, 
+                "DIRECTORY PATH INDICATED IN THE lib_path ARGUMENT MUST BE A VECTOR OF CHARACTERS.\nHERE IT IS:\n", 
                 base::paste0(lib_path, collapse = "\n", recycle0 = FALSE), 
                 collapse = NULL, 
                 recycle0 = FALSE
@@ -77,11 +100,8 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
             base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) # == in base::stop() to be able to add several messages between ==
         }else if( ! base::all(base::dir.exists(paths = lib_path), na.rm = TRUE)){ # separation to avoid the problem of tempo$problem == FALSE and lib_path == NA
             tempo_cat <- base::paste0(
-                "ERROR IN ", 
-                function_name, 
-                base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(" OF THE ", package_name, " PACKAGE", collapse = NULL, recycle0 = FALSE)), 
-                base::ifelse(test = error_text == "", yes = ".", no = error_text), 
-                "\nDIRECTORY PATH INDICATED IN THE lib_path ARGUMENT DOES NOT EXISTS:\n", 
+                error_text_start, 
+                "DIRECTORY PATH INDICATED IN THE lib_path ARGUMENT DOES NOT EXISTS:\n", 
                 base::paste0(lib_path, collapse = "\n", recycle0 = FALSE), 
                 collapse = NULL, 
                 recycle0 = FALSE
@@ -122,11 +142,8 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
     tempo <- base::eval(expr = base::parse(text = base::paste0("base::c(base::missing(", base::paste0(mandat_args, collapse = "),base::missing(", recycle0 = FALSE), "))", collapse = NULL, recycle0 = FALSE), file = "", n = NULL, prompt = "?", keep.source = base::getOption(x = "keep.source", default = NULL), srcfile = NULL, encoding = "unknown"), envir = base::environment(fun = NULL), enclos = base::environment(fun = NULL))
     if(base::any(tempo, na.rm = FALSE)){
         tempo_cat <- base::paste0(
-            "ERROR IN ", 
-            function_name, 
-            base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(" OF THE ", package_name, " PACKAGE", collapse = NULL, recycle0 = FALSE)), 
-            base::ifelse(test = error_text == "", yes = ".", no = error_text), 
-            "\nFOLLOWING ARGUMENT", 
+            error_text_start, 
+            "FOLLOWING ARGUMENT", 
             base::ifelse(test = base::sum(tempo, na.rm = TRUE) > 1, yes = "S HAVE", no = " HAS"), 
             " NO DEFAULT VALUE AND REQUIRE ONE:\n", 
             base::paste0(mandat_args[tempo], collapse = "\n", recycle0 = FALSE), 
@@ -165,11 +182,7 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
         tempo_log <- base::suppressWarnings(expr = base::sapply(X = base::lapply(X = arg_user_setting, FUN = function(x){base::is.na(x = x)}), FUN = function(x){base::any(x = x, na.rm = TRUE)}, simplify = TRUE, USE.NAMES = TRUE), classes = "warning") & base::lapply(X = arg_user_setting, FUN = function(x){base::length(x = x)}) == 1L # no argument provided by the user can be just NA
         if(base::any(tempo_log, na.rm = TRUE)){ # normally no NA because base::is.na() used here
             tempo_cat <- base::paste0(
-                "ERROR IN ", 
-                function_name, 
-                base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(" OF THE ", package_name, " PACKAGE", collapse = NULL, recycle0 = FALSE)), 
-                base::ifelse(test = error_text == "", yes = ".", no = error_text), 
-                "\n", 
+                error_text_start, 
                 base::ifelse(test = base::sum(tempo_log, na.rm = TRUE) > 1, yes = "THESE ARGUMENTS", no = "THIS ARGUMENT"), 
                 " CANNOT JUST BE NA:", 
                 base::paste0(arg_names[tempo_log], collapse = "\n", recycle0 = FALSE), 
@@ -192,11 +205,7 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
     tempo_log <- base::sapply( X = base::lapply(X = tempo_arg, FUN = function(x){base::get(x = x, pos = -1L, envir = base::parent.frame(n = 2), mode = "any", inherits = FALSE)}), FUN = function(x){base::is.null(x = x)}, simplify = TRUE, USE.NAMES = TRUE) # parent.frame(n = 2) because sapply(lapply())
     if(base::any(tempo_log, na.rm = TRUE)){ # normally no NA with base::is.null()
         tempo_cat <- base::paste0(
-            "ERROR IN ", 
-            function_name, 
-            base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(" OF THE ", package_name, " PACKAGE", collapse = NULL, recycle0 = FALSE)), 
-            base::ifelse(test = error_text == "", yes = ".", no = error_text), 
-            "\n", 
+            error_text_start, 
             base::ifelse(test = base::sum(tempo_log, na.rm = TRUE) > 1, yes = "THESE ARGUMENTS\n", no = "THIS ARGUMENT\n"), 
             base::paste0(tempo_arg[tempo_log], collapse = "\n", recycle0 = FALSE), 
             "\nCANNOT BE NULL", 
@@ -216,14 +225,11 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
     if(base::any(tempo_log, na.rm = TRUE)){
         tempo_cat <- base::paste0(
             "INTERNAL ERROR IN THE BACKBONE PART OF ", 
-            function_name, 
-            base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(" OF THE ", package_name, " PACKAGE", collapse = NULL, recycle0 = FALSE)), 
-            base::ifelse(test = error_text == "", yes = ".", no = error_text), 
-            "\n", 
+            intern_error_text_start, 
             base::ifelse(test = base::sum(tempo_log, na.rm = TRUE) > 1, yes = "THESE ARGUMENTS ARE", no = "THIS ARGUMENT IS"), 
             " NOT MODE \"character\":\n", 
             base::paste0(tempo_arg[tempo_log], collapse = "\n", recycle0 = FALSE), 
-            base::ifelse(test = base::is.null(x = internal_error_report_link), yes = "", no = base::paste0("\n\nPLEASE, REPORT THIS ERROR HERE: ", internal_error_report_link, collapse = NULL, recycle0 = FALSE)), 
+            intern_error_text_end, 
             collapse = NULL, 
             recycle0 = FALSE
         )
@@ -232,11 +238,7 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
         tempo_log <- base::sapply(X = base::lapply(X = tempo_arg, FUN = function(x){base::get(x = x, pos = -1L, envir = base::parent.frame(n = 2), mode = "any", inherits = FALSE)}), FUN = function(x){base::any(x == "", na.rm = FALSE)}, simplify = TRUE, USE.NAMES = TRUE) # parent.frame(n = 2) because sapply(lapply())
         if(base::any(tempo_log, na.rm = TRUE)){
             tempo_cat <- base::paste0(
-                "ERROR IN ", 
-                function_name, 
-                base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(" OF THE ", package_name, " PACKAGE", collapse = NULL, recycle0 = FALSE)), 
-                base::ifelse(test = error_text == "", yes = ".", no = error_text), 
-                "\n", 
+                error_text_start,  
                 base::ifelse(test = base::sum(tempo_log, na.rm = TRUE) > 1, yes = "THESE ARGUMENTS\n", no = "THIS ARGUMENT\n"), 
                 base::paste0(tempo_arg[tempo_log], collapse = "\n", recycle0 = FALSE),
                 "\nCANNOT CONTAIN EMPTY STRING \"\".", 
@@ -282,10 +284,8 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
         expr = if(base::length(x = dev_list) != base::length(x = grDevices::dev.list())){
             tempo_cat <- base::paste0(
                 "INTERNAL ERROR IN THE BACKBONE PART OF ", 
-                function_name, 
-                base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(" OF THE ", package_name, " PACKAGE", collapse = NULL, recycle0 = FALSE)), 
-                base::ifelse(test = error_text == "", yes = ".", no = error_text), 
-                "\n\nSOME GRAPHIC DEVICES WERE OPENED BY ", 
+                intern_error_text_start, 
+                "SOME GRAPHIC DEVICES WERE OPENED BY ", 
                 function_name, 
                 " BUT NOT CLOSED BEFORE END OF EXECUTION.\n\nIF IT IS EXPECTED, JUST REMOVE THE CODE DISPLAYING THIS MESSAGE INSIDE ", 
                 function_name, 
@@ -296,7 +296,7 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
                 ") AND AFTER (n = ", 
                 base::length(x = grDevices::dev.list()), 
                 ").", 
-                base::ifelse(test = base::is.null(x = internal_error_report_link), yes = "", no = base::paste0("\nPLEASE, REPORT THIS ERROR HERE: ", internal_error_report_link, collapse = NULL, recycle0 = FALSE)), 
+                intern_error_text_end, 
                 collapse = NULL, 
                 recycle0 = FALSE
             )
@@ -317,11 +317,8 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
     ######## other checkings
     if(base::length(x = data) == 0){
         tempo_cat <- base::paste0(
-            "ERROR IN ", 
-            function_name, 
-            base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(" OF THE ", package_name, " PACKAGE", collapse = NULL, recycle0 = FALSE)), 
-            base::ifelse(test = error_text == "", yes = ".", no = error_text), 
-            "\ndata ARGUMENT CANNOT BE LENGTH 0.", 
+            error_text_start, 
+            "data ARGUMENT CANNOT BE LENGTH 0.", 
             collapse = NULL, 
             recycle0 = FALSE
         )
@@ -330,11 +327,8 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
     if( ! base::is.null(x = lib_path)){
         if( ! base::all(base::dir.exists(paths = lib_path), na.rm = TRUE)){ # separation to avoid the problem of tempo$problem == FALSE and lib_path == NA
             tempo_cat <- base::paste0(
-                "ERROR IN ", 
-                function_name, 
-                base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(" OF THE ", package_name, " PACKAGE", collapse = NULL, recycle0 = FALSE)), 
-                base::ifelse(test = error_text == "", yes = ".", no = error_text), 
-                "\nDIRECTORY PATH INDICATED IN THE lib_path ARGUMENT DOES NOT EXISTS:\n", 
+                error_text_start, 
+                "DIRECTORY PATH INDICATED IN THE lib_path ARGUMENT DOES NOT EXISTS:\n", 
                 base::paste0(lib_path, collapse = "\n", recycle0 = FALSE), 
                 collapse = NULL, 
                 recycle0 = FALSE
@@ -360,11 +354,8 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
     if(base::any(base::names(x = data) %in% reserved_words, na.rm = FALSE)){
         tempo_log <- base::names(x = data) %in% reserved_words
         tempo_cat <- base::paste0(
-            "ERROR IN ", 
-            function_name, 
-            base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(" OF THE ", package_name, " PACKAGE", collapse = NULL, recycle0 = FALSE)), 
-            base::ifelse(test = error_text == "", yes = ".", no = error_text), 
-            "\nCOLUMN NAMES OF THE data1 ARGUMENT CANNOT BE ", 
+            error_text_start, 
+            "COLUMN NAMES OF THE data1 ARGUMENT CANNOT BE ", 
             base::ifelse(test = base::length(x = reserved_words) == 1, yes = "THIS WORD", no = "ONE OF THESE WORDS"), 
             ":\n", 
             base::paste0(reserved_words, collapse = "\n", recycle0 = FALSE), 
