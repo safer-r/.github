@@ -124,7 +124,7 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
             ),
             lib_path = lib_path, # write NULL if your function does not have any lib_path argument
             safer_check = FALSE, # TRUE only when .pack_and_function_check() is not used inside safer function
-            error_text = base::paste0(error_text_start, error_text, collapse = NULL, recycle0 = FALSE), 
+            error_text = base::sub(pattern = "^ERROR IN ", replacement = " INSIDE ", x = error_text_start, ignore.case = FALSE, perl = FALSE, fixed = FALSE, useBytes = FALSE), 
             internal_error_report_link = internal_error_report_link
         )
     }
