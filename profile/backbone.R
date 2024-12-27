@@ -26,8 +26,8 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
     # basic error text start
     error_text_start <- base::paste0(
         "ERROR IN ", 
+        base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(package_name, base::ifelse(test = grepl(x = function_name, pattern = "^\\."), yes = ":::", no = "::"), collapse = NULL, recycle0 = FALSE)), 
         function_name, 
-        base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(" OF THE ", package_name, " PACKAGE", collapse = NULL, recycle0 = FALSE)), 
         collapse = NULL, 
         recycle0 = FALSE
     )
@@ -55,8 +55,8 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
     # end basic error text start updated
     # internal error text
     intern_error_text_start <- base::paste0(
+        base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(package_name, base::ifelse(test = grepl(x = function_name, pattern = "^\\."), yes = ":::", no = "::"), collapse = NULL, recycle0 = FALSE)), 
         function_name, 
-        base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(" OF THE ", package_name, " PACKAGE", collapse = NULL, recycle0 = FALSE)), 
         base::ifelse(test = error_text == "", yes = ".", no = error_text), 
         "\n\n", 
         collapse = NULL, 
