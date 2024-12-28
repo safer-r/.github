@@ -66,27 +66,10 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
     # end internal error text
     #### end error_text initiation
 
-    #### critical operator checking
-    if( ! (base::all(safer_check %in% base::c(TRUE, FALSE), na.rm = FALSE) & base::length(x = safer_check) == 1 & base::all(base::is.logical(x = safer_check), na.rm = TRUE))){
-        tempo_cat <- base::paste0(
-            error_text_start, 
-            "safer_check ARGUMENT MUST BE EITHER TRUE OR FALSE.\nHER IT IS:\n", 
-            base::paste0(safer_check, collapse = "\n", recycle0 = FALSE), 
-            collapse = NULL, 
-            recycle0 = FALSE
-        )
-        base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) # == in base::stop() to be able to add several messages between ==
-    }
-    if(safer_check == TRUE){
-        saferDev:::.base_op_check(
-            error_text = base::sub(pattern = "^ERROR IN ", replacement = " INSIDE ", x = error_text_start, ignore.case = FALSE, perl = FALSE, fixed = FALSE, useBytes = FALSE)
-        )
-    }
-    #### end critical operator checking
-
-    #### package checking
+    #### environment checking
 
     ######## check of lib_path
+    # must be before any :: or ::: non basic package calling
     if( ! base::is.null(x = lib_path)){
         if( ! base::all(base::typeof(x = lib_path) == "character", na.rm = FALSE)){ # no na.rm = TRUE with typeof
             tempo_cat <- base::paste0(
@@ -115,6 +98,19 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
     }
     ######## end check of lib_path
 
+    ######## safer_check argument checking
+    if( ! (base::all(safer_check %in% base::c(TRUE, FALSE), na.rm = FALSE) & base::length(x = safer_check) == 1 & base::all(base::is.logical(x = safer_check), na.rm = TRUE))){
+        tempo_cat <- base::paste0(
+            error_text_start, 
+            "safer_check ARGUMENT MUST BE EITHER TRUE OR FALSE.\nHER IT IS:\n", 
+            base::paste0(safer_check, collapse = "\n", recycle0 = FALSE), 
+            collapse = NULL, 
+            recycle0 = FALSE
+        )
+        base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) # == in base::stop() to be able to add several messages between ==
+    }
+    ######## end safer_check argument checking
+
     ######## check of the required functions from the required packages
     if(safer_check == TRUE){
         saferDev:::.pack_and_function_check(
@@ -129,7 +125,15 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
     }
     ######## end check of the required functions from the required packages
 
-    #### end package checking
+    ######## critical operator checking
+    if(safer_check == TRUE){
+        saferDev:::.base_op_check(
+            error_text = base::sub(pattern = "^ERROR IN ", replacement = " INSIDE ", x = error_text_start, ignore.case = FALSE, perl = FALSE, fixed = FALSE, useBytes = FALSE)
+        )
+    }
+    ######## end critical operator checking
+
+    #### end environment checking
 
     #### argument primary checking
 
@@ -321,18 +325,6 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
             recycle0 = FALSE
         )
         base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL)
-    }
-    if( ! base::is.null(x = lib_path)){
-        if( ! base::all(base::dir.exists(paths = lib_path), na.rm = TRUE)){ # separation to avoid the problem of tempo$problem == FALSE and lib_path == NA
-            tempo_cat <- base::paste0(
-                error_text_start, 
-                "DIRECTORY PATH INDICATED IN THE lib_path ARGUMENT DOES NOT EXISTS:\n", 
-                base::paste0(lib_path, collapse = "\n", recycle0 = FALSE), 
-                collapse = NULL, 
-                recycle0 = FALSE
-            )
-            base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL)
-        }
     }
     ######## end other checkings
 
