@@ -357,7 +357,7 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
             collapse = NULL, 
             recycle0 = FALSE
         )
-        base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL)
+        base::stop(base::paste0("\n\n================\n\n", tempo.cat, "\n\n================\n\n", base::ifelse(test = base::is.null(x = warn), yes = "", no = base::paste0("IN ADDITION\nWARNING", base::ifelse(test = warn_count > 1, yes = "S", no = ""), ":\n\n", warn, collapse = NULL, recycle0 = FALSE)), collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL)
     }
     ######## end reserved word checking
 
@@ -369,12 +369,16 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
 
     #### warning output
     if( ! base::is.null(x = warn)){
-        base::on.exit(expr = base::warning(base::paste0(
-            base::sub(pattern = "^ERROR IN ", replacement = "FROM ", x = error_text_start, ignore.case = FALSE, perl = FALSE, fixed = FALSE, useBytes = FALSE), 
-            warn, 
-            collapse = NULL, 
-            recycle0 = FALSE
-        ), call. = FALSE, immediate. = FALSE, noBreaks. = FALSE, domain = NULL), add = FALSE, after = TRUE)
+        base::on.exit(
+            expr = base::warning(
+                base::paste0(
+                    base::sub(pattern = "^ERROR IN ", replacement = "FROM ", x = error_text_start, ignore.case = FALSE, perl = FALSE, fixed = FALSE, useBytes = FALSE), 
+                    warn, 
+                    collapse = NULL, 
+                    recycle0 = FALSE
+                ), call. = FALSE, immediate. = FALSE, noBreaks. = FALSE, domain = NULL
+            ), add = TRUE, after = TRUE
+        )
     }
     base::on.exit(expr = base::options(warning.length = ini_warning_length), add = TRUE, after = TRUE)
     #### end warning output
