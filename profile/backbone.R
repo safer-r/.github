@@ -1,4 +1,4 @@
-BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, error_text = ""){ 
+BACKBONE <- function(data, seed = NULL, lib_path = NULL, safer_check = TRUE, error_text = ""){ 
 
     #### package name
     package_name <- "saferDev" # write NULL if the function developed is not in a package
@@ -23,7 +23,8 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
     #### end arguments settings
 
     #### error_text initiation
-    # basic error text start
+
+    ######## basic error text start
     error_text_start <- base::paste0(
         "ERROR IN ", 
         base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(package_name, base::ifelse(test = base::grepl(x = function_name, pattern = "^\\.", ignore.case = FALSE, perl = FALSE, fixed = FALSE, useBytes = FALSE), yes = ":::", no = "::"), collapse = NULL, recycle0 = FALSE)), 
@@ -31,8 +32,9 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
         collapse = NULL, 
         recycle0 = FALSE
     )
-    # end basic error text start
-    # check of the error_text argument
+    ######## end basic error text start
+
+    ######## check of the error_text argument
     if( ! (base::all(base::typeof(x = error_text) == "character", na.rm = TRUE) & base::length(x = error_text) == 1)){ # no need to test is.null(error_text) because typeof(x = NULL) == "character" returns FALSE
         tempo_cat <- base::paste0(
             error_text_start, 
@@ -43,8 +45,9 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
         )
         base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) # == in base::stop() to be able to add several messages between ==
     }
-    # end check of the error_text argument
-    # basic error text start updated
+    ######## end check of the error_text argument
+
+    ######## basic error text start updated
     error_text_start <- base::paste0(
         error_text_start, 
         base::ifelse(test = error_text == "", yes = ".", no = error_text), 
@@ -52,8 +55,9 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
         collapse = NULL, 
         recycle0 = FALSE
     )
-    # end basic error text start updated
-    # internal error text
+    ######## end basic error text start updated
+
+    ######## internal error text
     intern_error_text_start <- base::paste0(
         base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(package_name, base::ifelse(test = base::grepl(x = function_name, pattern = "^\\.", ignore.case = FALSE, perl = FALSE, fixed = FALSE, useBytes = FALSE), yes = ":::", no = "::"), collapse = NULL, recycle0 = FALSE)), 
         function_name, 
@@ -63,7 +67,8 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
         recycle0 = FALSE
     )
     intern_error_text_end <- base::ifelse(test = base::is.null(x = internal_error_report_link), yes = "", no = base::paste0("\n\nPLEASE, REPORT THIS ERROR HERE: ", internal_error_report_link, ".", collapse = NULL, recycle0 = FALSE))
-    # end internal error text
+    ######## end internal error text
+
     #### end error_text initiation
 
     #### environment checking
@@ -199,8 +204,8 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
     ######## management of NULL arguments
     tempo_arg <-base::c(
         "data", 
-        # "lib_path", # inactivated because can be NULL
         # "seed", # inactivated because can be NULL 
+        # "lib_path", # inactivated because can be NULL
         "safer_check",
         "error_text"
     )
@@ -219,7 +224,7 @@ BACKBONE <- function(data, lib_path = NULL, seed = NULL, safer_check = TRUE, err
     ######## end management of NULL arguments
 
     ######## management of "" in arguments of mode character
-    tempo_arg <-base::c(
+    tempo_arg <- base::c(
         "lib_path"
         # "error_text" # inactivated because can be ""
     )
