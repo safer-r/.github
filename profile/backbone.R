@@ -51,7 +51,7 @@ BACKBONE <- function(data, seed = NULL, lib_path = NULL, safer_check = TRUE, err
     error_text_start <- base::paste0(
         error_text_start, 
         base::ifelse(test = error_text == "", yes = ".", no = error_text), 
-        "\n", 
+        "\n\n", 
         collapse = NULL, 
         recycle0 = FALSE
     )
@@ -62,7 +62,7 @@ BACKBONE <- function(data, seed = NULL, lib_path = NULL, safer_check = TRUE, err
         base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(package_name, base::ifelse(test = base::grepl(x = function_name, pattern = "^\\.", ignore.case = FALSE, perl = FALSE, fixed = FALSE, useBytes = FALSE), yes = ":::", no = "::"), collapse = NULL, recycle0 = FALSE)), 
         function_name, 
         base::ifelse(test = error_text == "", yes = ".", no = error_text), 
-        "\n", 
+        "\n\n", 
         collapse = NULL, 
         recycle0 = FALSE
     )
