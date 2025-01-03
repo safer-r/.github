@@ -119,14 +119,14 @@ The safer project gathers R functions of class S3 with a similar encoding that b
 
 Functions of class S3 from the safer project present the same encoding structure before the 'main' code section (see the [backbone.R](./backbone.R) file), which tackle the aspects described above, including:
 - Reproducibility
-    - Package systematically indicated for any used function (R Scope seeking non authorized). Example `base::paste()` instead of `paste()`.
+    - Package systematically indicated for any used function (R Scope seeking controlled). Example `base::paste()` instead of `paste()`.
     - All the arguments of functions written, even if default values are used, to prevent argument name change or default value change (like the `stringsAsFactors` argument of `read.table()`, for which default value changed from TRUE to FALSE since R version 4.0). Example `base::sum(1:3, na.rm = FALSE)` instead of `base::sum(1:3)`.
-    - Argument `safer_check` added, that checks 1) the presence in local R library folders of all the non basic functions and corresponding packages used in the code and 2) that all the classical R operators (`<-`, `(`, etc.) are not overwritten by other packages, since these packages always preceed the base R items in the R scope. Basic functions of R can be overwritten by other packages, since safer functions use the `::` writting for all functions, thus controlling the R scope.
+    - Argument `safer_check` added in each safer function, that checks 1) the presence in local R library folders of all the non basic functions and corresponding packages used in the code and 2) that all the classical R operators (`<-`, `(`, etc.) are not overwritten by other packages, since these packages always preceed the base R items in the R scope.
     - Seeding of the random number generator using an argument each time randomness is used, and protecting potential seeding in the global environment.
 - Intuitiveness
-    - Argument `...` not authorized.
+    - Argument `...` not authorized in safer functions.
 - Explicit messages
-    - Name of the function and corresponding package in all error and warning messages.
+    - Name of the functions and corresponding packages in all error and warning messages, including the embedding functions, so that we better know the origin of the message.
     - All warning messages added in the error message string.
     - explicit error messages, following argument checking, if: 
         - No values for arguments with no default values.
