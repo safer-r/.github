@@ -35,10 +35,19 @@ BACKBONE <- function(data, seed = NULL, lib_path = NULL, safer_check = TRUE, err
     ######## end basic error text start
 
     ######## check of the error_text argument
+    if(base::all(x = base::is.na(x = error_text), na.rm = TRUE)){ # na.rm = TRUE but no NA with base::is.na()
+        tempo_cat <- base::paste0(
+            error_text_start, 
+            "\n\nerror_text ARGUMENT CANNOT BE NA ONLY.", # \n\n must be there here
+            collapse = NULL, 
+            recycle0 = FALSE
+        )
+        base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) # == in base::stop() to be able to add several messages between ==
+    }
     if( ! (base::all(base::typeof(x = error_text) == "character", na.rm = TRUE) & base::length(x = error_text) == 1)){ # no need to test is.null(error_text) because typeof(x = NULL) == "character" returns FALSE. na.rm = TRUE but no NA returned with typeof (typeof(NA) == "character" returns FALSE)
         tempo_cat <- base::paste0(
             error_text_start, 
-            "\nTHE error_text ARGUMENT MUST BE A SINGLE CHARACTER STRING (CAN BE \"\").\nHERE IT IS:\n", 
+            "\n\nTHE error_text ARGUMENT MUST BE A SINGLE CHARACTER STRING (CAN BE \"\").\nHERE IT IS:\n", # \n\n must be there here
             base::ifelse(test = base::length(x = error_text) == 0 | base::all(error_text == base::quote(expr = ), na.rm = TRUE), yes = "NULL, EMPTY OBJECT OR EMPTY NAME", no = base::paste0(error_text, collapse = "\n", recycle0 = FALSE)), 
             collapse = NULL, 
             recycle0 = FALSE
