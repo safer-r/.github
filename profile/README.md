@@ -7,7 +7,7 @@
 [R](https://www.r-project.org) is a permissive programming language: it will 'try to work' in many situations and returns something, when other programming languages would have returned an error. This advantage partly explains its success, as it is commonly used by non programers. But it comes with several problems which could soften reproducibility or consistency aspects:
 - **Non intuitive behaviors.**
 
-    Example with the `sample()` function:
+    - Example with the `sample()` function:
     ```
     set.seed(16)
     sample(1:10, size = 1) # select a single value among integers 1 to 10
@@ -25,6 +25,25 @@
     ```
     <pre>[1] 4 6</pre>
     The result is non intuitive, with no warning message.
+
+    - Example with the `all()` and `any()` functions:
+    ```
+    all(NA, na.rm = TRUE) # result identical with all(c(NA, NA), na.rm = TRUE)
+    ```
+    <pre>[1] TRUE</pre>
+    The result is not intuitive. In fact, the `all()` function returns `TRUE` when empty:
+    ```
+    all() # result identical with all(logical())
+    ```
+    <pre>[1] TRUE</pre>
+    Which is hard to handle when using `all()` in a `if(){}` condition statement.
+
+    To the opposite, but also hard to handl is the `any()` function that returns `FALSE` when empty:
+    ```
+    any() # result identical with any(logical())
+    ```
+    <pre>[1] FALSE</pre>
+    A more convenient behavior would have been an error message, or at least a warning.
 <br /><br />
 - **Lack of control of the arguments of functions or presence of the `...` argument in functions.**
 
@@ -125,16 +144,18 @@ Functions of class S3 from the safer project present the same encoding structure
     - Seeding of the random number generator using an argument each time randomness is used, and protecting potential seeding in the global environment.
 - Intuitiveness
     - Argument `...` not authorized in safer functions.
+    - Argument with `NA` only not authorized in safer functions, in order to deal with `if(all(X, na.rm = TRUE)){}` that would return `TRUE` if `X` is only made of `NA`.
 - Explicit messages
     - Name of the functions and corresponding packages in all error and warning messages, including the embedding functions, so that we better know the origin of the message.
+    - Explicit error messages,
     - All warning messages added in the error message string.
-    - explicit error messages, following argument checking, if: 
-        - No values for arguments with no default values.
-        - Unexpected class, type, mode, length, restricted values panel, kind of numeric values in addition to the distinction between 'integer' and 'double' (proportion only? Inf values authorized? negative values authorized?).
-        - Unauthorized `NA` (among other values or as unique value).
-        - Unauthorized `NULL` value.
-        - Unauthorized `` value in vector of characters.
-        - Unexpected structure of complex objects, like data frames and lists.
+    - Strong checking of each argument, for instance: 
+        - Values for arguments with no default values.
+        - Expected class, type, mode, length, restricted values panel, kind of numeric values in addition to the distinction between 'integer' and 'double' (proportion only? Inf values authorized? negative values authorized?).
+        - Authorized `NA` (among other values, never as unique value) or not.
+        - Authorized `NULL` value or not.
+        - Authorized `` value in vector of characters or not.
+        - Expected structure of complex objects, like data frames and lists.
 <br /><br />
 ## Make a safer function
 
