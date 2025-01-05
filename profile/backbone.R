@@ -19,52 +19,24 @@ BACKBONE <- function(data, seed = NULL, lib_path = NULL, safer_check = TRUE, err
 
     #### arguments settings
     arg_user_setting <- tempo_settings[-1] # list of the argument settings (excluding default values not provided by the user). Always a list, even if 1 argument. So ok for lapply() usage (management of NA section)
+    arg_user_setting_names <- base::names(x = arg_user_setting)
     arg_names <- base::names(x = base::formals(fun = base::sys.function(which = base::sys.parent(n = 2)), envir = base::parent.frame(n = 1))) # names of all the arguments
     #### end arguments settings
 
     #### error_text initiation
 
     ######## basic error text start
+    tempo_cat <- base::paste0(base::unlist(error_text), collapse = "", recycle0 = FALSE) # if error_text is a string, changes nothing
     error_text_start <- base::paste0(
         "ERROR IN ", # must not be changed, because this "ERROR IN " string is used for text replacement
         base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(package_name, base::ifelse(test = base::grepl(x = function_name, pattern = "^\\.", ignore.case = FALSE, perl = FALSE, fixed = FALSE, useBytes = FALSE), yes = ":::", no = "::"), collapse = NULL, recycle0 = FALSE)), 
         function_name, 
-        collapse = NULL, 
-        recycle0 = FALSE
-    )
-    ######## end basic error text start
-
-    ######## check of the error_text argument
-    if(base::all(x = base::is.na(x = error_text), na.rm = TRUE)){ # na.rm = TRUE but no NA with base::is.na()
-        tempo_cat <- base::paste0(
-            error_text_start, 
-            "\n\nerror_text ARGUMENT CANNOT BE NA ONLY.", # \n\n must be there here
-            collapse = NULL, 
-            recycle0 = FALSE
-        )
-        base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) # == in base::stop() to be able to add several messages between ==
-    }
-    if( ! (base::all(base::typeof(x = error_text) == "character", na.rm = TRUE) & base::length(x = error_text) == 1)){ # no need to test is.null(error_text) because typeof(x = NULL) == "character" returns FALSE. na.rm = TRUE but no NA returned with typeof (typeof(NA) == "character" returns FALSE)
-        tempo_cat <- base::paste0(
-            error_text_start, 
-            "\n\nTHE error_text ARGUMENT MUST BE A SINGLE CHARACTER STRING (CAN BE \"\").\nHERE IT IS:\n", # \n\n must be there here
-            base::ifelse(test = base::length(x = error_text) == 0 | base::all(error_text == base::quote(expr = ), na.rm = TRUE), yes = "NULL, EMPTY OBJECT OR EMPTY NAME", no = base::paste0(error_text, collapse = "\n", recycle0 = FALSE)), 
-            collapse = NULL, 
-            recycle0 = FALSE
-        )
-        base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) # == in base::stop() to be able to add several messages between ==
-    }
-    ######## end check of the error_text argument
-
-    ######## basic error text start updated
-    error_text_start <- base::paste0(
-        error_text_start, 
-        base::ifelse(test = error_text == "", yes = ".", no = error_text), 
+        base::ifelse(test = tempo_cat == "", yes = ".", no = tempo_cat), 
         "\n\n", 
         collapse = NULL, 
         recycle0 = FALSE
     )
-    ######## end basic error text start updated
+    ######## end basic error text start
 
     ######## internal error text
     intern_error_text_start <- base::paste0(
@@ -80,20 +52,74 @@ BACKBONE <- function(data, seed = NULL, lib_path = NULL, safer_check = TRUE, err
 
     #### end error_text initiation
 
-    #### environment checking
+    #### argument primary checking
 
-    ######## check of lib_path
-    # must be before any :: or ::: non basic package calling
-    if( ! base::is.null(x = lib_path)){ #  is.null(NA) returns FALSE so OK.
-        if(base::all(x = base::is.na(x = lib_path), na.rm = TRUE)){ # na.rm = TRUE but no NA with base::is.na()
+    ######## arg with no default values
+    mandat_args <- base::c(
+        "data"
+    )
+    tempo <- base::eval(expr = base::parse(text = base::paste0("base::c(base::missing(", base::paste0(mandat_args, collapse = "),base::missing(", recycle0 = FALSE), "))", collapse = NULL, recycle0 = FALSE), file = "", n = NULL, prompt = "?", keep.source = base::getOption(x = "keep.source", default = NULL), srcfile = NULL, encoding = "unknown"), envir = base::environment(fun = NULL), enclos = base::environment(fun = NULL))
+    if(base::any(tempo, na.rm = TRUE)){
+        tempo_cat <- base::paste0(
+            error_text_start, 
+            "FOLLOWING ARGUMENT", 
+            base::ifelse(test = base::sum(tempo, na.rm = TRUE) > 1, yes = "S HAVE", no = " HAS"), 
+            " NO DEFAULT VALUE AND REQUIRE ONE:\n", 
+            base::paste0(mandat_args[tempo], collapse = "\n", recycle0 = FALSE), 
+            collapse = NULL, 
+            recycle0 = FALSE
+        )
+        base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) # == in base::stop() to be able to add several messages between ==
+    }
+    ######## end arg with no default values
+
+    ######## management of NULL arguments
+    # before NA checking because is.na(NULL) return logical(0) and all(logical(0)) is TRUE
+    tempo_arg <-base::c(
+        "data", 
+        # "seed", # inactivated because can be NULL 
+        # "lib_path", # inactivated because can be NULL
+        "safer_check", 
+        "error_text"
+    )
+    tempo_log <- base::sapply( X = base::lapply(X = tempo_arg, FUN = function(x){base::get(x = x, pos = -1L, envir = base::parent.frame(n = 2), mode = "any", inherits = FALSE)}), FUN = function(x){base::is.null(x = x)}, simplify = TRUE, USE.NAMES = TRUE) # parent.frame(n = 2) because sapply(lapply())
+    if(base::any(tempo_log, na.rm = TRUE)){ # normally no NA with base::is.null()
+        tempo_cat <- base::paste0(
+            error_text_start, 
+            base::ifelse(test = base::sum(tempo_log, na.rm = TRUE) > 1, yes = "THESE ARGUMENTS\n", no = "THIS ARGUMENT\n"), 
+            base::paste0(tempo_arg[tempo_log], collapse = "\n", recycle0 = FALSE), 
+            "\nCANNOT BE NULL", 
+            collapse = NULL, 
+            recycle0 = FALSE
+        )
+        base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) # == in base::stop() to be able to add several messages between ==
+    }
+    ######## end management of NULL arguments
+
+    ######## management of NA arguments
+    if(base::length(x = arg_user_setting) != 0){
+        tempo_log <- base::suppressWarnings(expr = base::sapply(X = base::lapply(X = arg_user_setting, FUN = function(x){base::is.na(x = x)}), FUN = function(x){base::all(x = x, na.rm = TRUE) & base::length(x = x) > 0}, simplify = TRUE, USE.NAMES = TRUE), classes = "warning") # no argument provided by the user can be just made of NA. is.na(NULL) returns logical(0), the reason why base::length(x = x) > 0 is used # warning: all(x = x, na.rm = TRUE) but normally no NA because base::is.na() used here. Warning: would not work if arg_user_setting is a vector (because treat each element as a compartment), but ok because it is always a list, even is 0 or 1 argument in the developed function
+        if(base::any(tempo_log, na.rm = TRUE)){
             tempo_cat <- base::paste0(
                 error_text_start, 
-                "lib_path ARGUMENT CANNOT BE NA ONLY.", 
+                base::ifelse(test = base::sum(tempo_log, na.rm = TRUE) > 1, yes = "THESE ARGUMENTS", no = "THIS ARGUMENT"), 
+                " CANNOT BE NA ONLY:\n", 
+                base::paste0(arg_user_setting_names[tempo_log], collapse = "\n", recycle0 = FALSE), 
                 collapse = NULL, 
                 recycle0 = FALSE
             )
             base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) # == in base::stop() to be able to add several messages between ==
         }
+    }
+    ######## end management of NA arguments
+
+    #### end argument primary checking
+
+    #### environment checking
+
+    ######## check of lib_path
+    # must be before any :: or ::: non basic package calling
+    if( ! base::is.null(x = lib_path)){ #  is.null(NA) returns FALSE so OK.
         if( ! base::all(base::typeof(x = lib_path) == "character", na.rm = TRUE)){ # na.rm = TRUE but no NA returned with typeof (typeof(NA) == "character" returns FALSE)
             tempo_cat <- base::paste0(
                 error_text_start, 
@@ -103,7 +129,7 @@ BACKBONE <- function(data, seed = NULL, lib_path = NULL, safer_check = TRUE, err
                 recycle0 = FALSE
             )
             base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) # == in base::stop() to be able to add several messages between ==
-        }else if( ! base::all(base::dir.exists(paths = lib_path), na.rm = TRUE)){ # separation to avoid the problem of tempo$problem == FALSE and lib_path == NA. dir.exists(paths = NA) returns an error, so ok.
+        }else if( ! base::all(base::dir.exists(paths = lib_path), na.rm = TRUE)){ # separation to avoid the problem of tempo$problem == FALSE and lib_path == NA. dir.exists(paths = NA) returns an error, so ok. dir.exists(paths = "") returns FALSE so ok
             tempo_cat <- base::paste0(
                 error_text_start, 
                 "DIRECTORY PATH INDICATED IN THE lib_path ARGUMENT DOES NOT EXISTS:\n", 
@@ -122,14 +148,7 @@ BACKBONE <- function(data, seed = NULL, lib_path = NULL, safer_check = TRUE, err
     ######## end check of lib_path
 
     ######## safer_check argument checking
-    safer_check_test <- FALSE
-    if(base::is.null(safer_check)){ #  is.null(NA) returns FALSE so OK.
-        safer_check_test <- TRUE
-    }
     if( ! (base::all(safer_check %in% base::c(TRUE, FALSE), na.rm = TRUE) & base::length(x = safer_check) == 1)){ #  na.rm = TRUE but no NA returned with NA %in% base::c(TRUE, FALSE)
-        safer_check_test <- TRUE
-    }
-    if(safer_check_test == TRUE){
         tempo_cat <- base::paste0(
             error_text_start, 
             "safer_check ARGUMENT MUST BE EITHER TRUE OR FALSE.\nHERE IT IS:\n", # quote(expr = )
@@ -165,65 +184,7 @@ BACKBONE <- function(data, seed = NULL, lib_path = NULL, safer_check = TRUE, err
 
     #### end environment checking
 
-    #### argument primary checking
-
-    ######## arg with no default values
-    mandat_args <- base::c(
-        "data"
-    )
-    tempo <- base::eval(expr = base::parse(text = base::paste0("base::c(base::missing(", base::paste0(mandat_args, collapse = "),base::missing(", recycle0 = FALSE), "))", collapse = NULL, recycle0 = FALSE), file = "", n = NULL, prompt = "?", keep.source = base::getOption(x = "keep.source", default = NULL), srcfile = NULL, encoding = "unknown"), envir = base::environment(fun = NULL), enclos = base::environment(fun = NULL))
-    if(base::any(tempo, na.rm = TRUE)){
-        tempo_cat <- base::paste0(
-            error_text_start, 
-            "FOLLOWING ARGUMENT", 
-            base::ifelse(test = base::sum(tempo, na.rm = TRUE) > 1, yes = "S HAVE", no = " HAS"), 
-            " NO DEFAULT VALUE AND REQUIRE ONE:\n", 
-            base::paste0(mandat_args[tempo], collapse = "\n", recycle0 = FALSE), 
-            collapse = NULL, 
-            recycle0 = FALSE
-        )
-        base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) # == in base::stop() to be able to add several messages between ==
-    }
-    ######## end arg with no default values
-
-    ######## management of NA arguments
-    if(base::length(x = arg_user_setting) != 0){
-        tempo_log <- base::suppressWarnings(expr = base::sapply(X = base::lapply(X = arg_user_setting, FUN = function(x){base::is.na(x = x)}), FUN = function(x){base::all(x = x, na.rm = FALSE)}, simplify = TRUE, USE.NAMES = TRUE), classes = "warning") # no argument provided by the user can be just made of NA. is.na(NULL) return FALSE. # warning: all(x = x, na.rm = TRUE) but normally no NA because base::is.na() used here. Warning: does not work if arg_user_setting is a vector (because treat each element as a compartment), but ok because it is always a list, evan is 0 or 1 argument in the developed function
-        if(base::any(tempo_log, na.rm = TRUE)){
-            tempo_cat <- base::paste0(
-                error_text_start, 
-                base::ifelse(test = base::sum(tempo_log, na.rm = TRUE) > 1, yes = "THESE ARGUMENTS", no = "THIS ARGUMENT"), 
-                " CANNOT BE NA ONLY:", 
-                base::paste0(arg_names[tempo_log], collapse = "\n", recycle0 = FALSE), 
-                collapse = NULL, 
-                recycle0 = FALSE
-            )
-            base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) # == in base::stop() to be able to add several messages between ==
-        }
-    }
-    ######## end management of NA arguments
-
-    ######## management of NULL arguments
-    tempo_arg <-base::c(
-        "data", 
-        # "seed", # inactivated because can be NULL 
-        # "lib_path", # inactivated because can be NULL
-        # "safer_check", # inactivated because already checked
-        "error_text"
-    )
-    tempo_log <- base::sapply( X = base::lapply(X = tempo_arg, FUN = function(x){base::get(x = x, pos = -1L, envir = base::parent.frame(n = 2), mode = "any", inherits = FALSE)}), FUN = function(x){base::is.null(x = x)}, simplify = TRUE, USE.NAMES = TRUE) # parent.frame(n = 2) because sapply(lapply())
-    if(base::any(tempo_log, na.rm = TRUE)){ # normally no NA with base::is.null()
-        tempo_cat <- base::paste0(
-            error_text_start, 
-            base::ifelse(test = base::sum(tempo_log, na.rm = TRUE) > 1, yes = "THESE ARGUMENTS\n", no = "THIS ARGUMENT\n"), 
-            base::paste0(tempo_arg[tempo_log], collapse = "\n", recycle0 = FALSE), 
-            "\nCANNOT BE NULL", 
-            collapse = NULL, 
-            recycle0 = FALSE
-        )
-        base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) # == in base::stop() to be able to add several messages between ==
-    }
-    ######## end management of NULL arguments
+    #### argument secondary checking
 
     ######## argument checking with arg_check()
     argum_check <- NULL
@@ -284,7 +245,7 @@ BACKBONE <- function(data, seed = NULL, lib_path = NULL, safer_check = TRUE, err
     }
     ######## end management of "" in arguments of mode character
 
-    #### end argument primary checking
+    #### end argument secondary checking
 
     #### second round of checking and data preparation
 
