@@ -27,7 +27,7 @@ BACKBONE <- function(data, seed = NULL, lib_path = NULL, safer_check = TRUE, err
     #### error_text initiation
 
     ######## basic error text start
-    tempo_cat <- base::paste0(base::unlist(error_text), collapse = "", recycle0 = FALSE) # if error_text is a string, changes nothing
+    tempo_cat <- base::paste0(base::unlist(x = error_text, recursive = TRUE, use.names = TRUE), collapse = "", recycle0 = FALSE) # if error_text is a string, changes nothing
     error_text_start <- base::paste0(
         "ERROR IN ", # must not be changed, because this "ERROR IN " string is used for text replacement
         base::ifelse(test = base::is.null(x = package_name), yes = "", no = base::paste0(package_name, base::ifelse(test = base::grepl(x = function_name, pattern = "^\\.", ignore.case = FALSE, perl = FALSE, fixed = FALSE, useBytes = FALSE), yes = ":::", no = "::"), collapse = NULL, recycle0 = FALSE)), 
