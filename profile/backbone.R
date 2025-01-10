@@ -88,8 +88,8 @@ BACKBONE <- function(data, seed = NULL, lib_path = NULL, safer_check = TRUE, err
         "data", 
         # "seed", # inactivated because can be NULL 
         # "lib_path", # inactivated because can be NULL
-        "safer_check", 
-        "error_text" # NULL converted to "" above but kept here because has no reason to be NULL
+        "safer_check"
+        # "error_text" # inactivated because NULL converted to "" above
     )
     tempo_log <- base::sapply(X = base::lapply(X = tempo_arg, FUN = function(x){base::get(x = x, pos = -1L, envir = base::parent.frame(n = 2), mode = "any", inherits = FALSE)}), FUN = function(x){base::is.null(x = x)}, simplify = TRUE, USE.NAMES = TRUE) # parent.frame(n = 2) because sapply(lapply())
     if(base::any(tempo_log, na.rm = TRUE)){ # normally no NA with base::is.null()
