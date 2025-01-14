@@ -1,4 +1,4 @@
-BACKBONE <- function(data, seed = NULL, lib_path = NULL, safer_check = TRUE, error_text = ""){ 
+BACKBONE <- function(data, arg1 = "test", seed = NULL, lib_path = NULL, safer_check = TRUE, error_text = ""){ 
 
     #### package name
     package_name <- "saferDev" # write NULL if the function developed is not in a package
@@ -87,6 +87,7 @@ BACKBONE <- function(data, seed = NULL, lib_path = NULL, safer_check = TRUE, err
     # before NA checking because is.na(NULL) return logical(0) and all(logical(0)) is TRUE
     tempo_arg <-base::c(
         "data", 
+        "arg1",
         # "seed", # inactivated because can be NULL 
         # "lib_path", # inactivated because can be NULL
         "safer_check"
@@ -231,6 +232,7 @@ BACKBONE <- function(data, seed = NULL, lib_path = NULL, safer_check = TRUE, err
     ee <- base::expression(argum_check <- base::c(argum_check, tempo$problem) , text_check <- base::c(text_check, tempo$text) , checked_arg_names <- base::c(checked_arg_names, tempo$object.name))
     # add as many lines as below, for each of your arguments of your function in development
     tempo <- saferDev::arg_check(data = data, class = NULL, typeof = NULL, mode = "numeric", length = NULL, prop = FALSE, double_as_integer_allowed = FALSE, options = NULL, all_options_in_data = FALSE, na_contain = TRUE, neg_values = TRUE, inf_values = TRUE, print = FALSE, data_name = NULL, data_arg = TRUE, lib_path = lib_path, safer_check = FALSE, error_text = embed_error_text) ; base::eval(expr = ee, envir = base::environment(fun = NULL), enclos = base::environment(fun = NULL)) # copy - paste this line as much as necessary
+    tempo <- saferDev::arg_check(data = arg1, class = "vector", typeof = NULL, mode = "character", length = 1, prop = FALSE, double_as_integer_allowed = FALSE, options = NULL, all_options_in_data = FALSE, na_contain = TRUE, neg_values = TRUE, inf_values = TRUE, print = FALSE, data_name = NULL, data_arg = TRUE, lib_path = lib_path, safer_check = FALSE, error_text = embed_error_text) ; base::eval(expr = ee, envir = base::environment(fun = NULL), enclos = base::environment(fun = NULL)) # copy - paste this line as much as necessary
     if( ! base::is.null(x = seed)){ # for all arguments that can be NULL, write like this:
         tempo <- saferDev::arg_check(data = seed, class = "vector", typeof = "integer", mode = NULL, length = NULL, prop = FALSE, double_as_integer_allowed = TRUE, options = NULL, all_options_in_data = FALSE, na_contain = FALSE, neg_values = TRUE, inf_values = FALSE, print = FALSE, data_name = NULL, data_arg = TRUE, lib_path = lib_path, safer_check = FALSE, error_text = embed_error_text) ; base::eval(expr = ee, envir = base::environment(fun = NULL), enclos = base::environment(fun = NULL))
     }
@@ -265,7 +267,8 @@ BACKBONE <- function(data, seed = NULL, lib_path = NULL, safer_check = TRUE, err
 
     ######## management of "" in arguments of mode character
     tempo_arg <- base::c(
-        "lib_path"
+        "arg1"
+        # "lib_path" # inactivated because already checked above
         # "error_text" # inactivated because can be ""
     )
     tempo_log <- ! base::sapply(X = base::lapply(X = tempo_arg, FUN = function(x){base::get(x = x, pos = -1L, envir = base::parent.frame(n = 2), mode = "any", inherits = FALSE)}), FUN = function(x){if(base::is.null(x = x)){base::return(TRUE)}else{base::all(base::mode(x = x) == "character", na.rm = TRUE)}}, simplify = TRUE, USE.NAMES = TRUE) # parent.frame(n = 2) because sapply(lapply())  #  need to test is.null() here
