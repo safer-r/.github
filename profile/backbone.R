@@ -108,7 +108,7 @@ BACKBONE <- function(data, arg1 = "test", seed = NULL, lib_path = NULL, safer_ch
     ######## end management of NULL arguments
 
     ######## management of NA arguments
-    # arguments values of class "expression", "name", "function" are not evaluated
+    # warning: arguments values of class "expression", "name", "function" are not checked because need to be eval, but sometimes, problem of environment
     if(base::length(x = arg_user_setting) != 0){
         tempo_log <- base::suppressWarnings(
             expr = base::sapply(
@@ -143,6 +143,38 @@ BACKBONE <- function(data, arg1 = "test", seed = NULL, lib_path = NULL, safer_ch
         }
     }
     ######## end management of NA arguments
+
+    ######## management of empty non NULL arguments
+    # warning: arguments values of class "expression", "name", "function" are not checked because need to be eval, but sometimes, problem of environment
+    if(base::length(x = arg_user_setting) != 0){
+        tempo_log <- base::suppressWarnings(
+            expr = base::sapply(
+                X = arg_user_setting, 
+                FUN = function(x){
+                    if(base::all(base::class(x = x) %in% base::c("expression", "name", "function"), na.rm = TRUE)){
+                        FALSE
+                    }else{
+                        base::length(x = x) == 0 & ! base::is.null(x = x)
+                    }
+                }, 
+                simplify = TRUE, 
+                USE.NAMES = TRUE
+            ), 
+            classes = "warning"
+        ) # no argument provided by the user can be empty non NULL object. Warning: would not work if arg_user_setting is a vector (because treat each element as a compartment), but ok because it is always a list, even is 0 or 1 argument in the developed function
+        if(base::any(tempo_log, na.rm = TRUE)){
+            tempo_cat <- base::paste0(
+                error_text_start, 
+                base::ifelse(test = base::sum(tempo_log, na.rm = TRUE) > 1, yes = "THESE ARGUMENTS", no = "THIS ARGUMENT"), 
+                " CANNOT BE AN EMPTY NON NULL OBJECT:\n", 
+                base::paste0(arg_user_setting_names[tempo_log], collapse = "\n", recycle0 = FALSE), 
+                collapse = NULL, 
+                recycle0 = FALSE
+            )
+            base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) # == in base::stop() to be able to add several messages between ==
+        }
+    }
+    ######## end management of empty non NULL arguments
 
     #### end argument primary checking
 
@@ -191,6 +223,8 @@ BACKBONE <- function(data, arg1 = "test", seed = NULL, lib_path = NULL, safer_ch
                 )
                 base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) # == in base::stop() to be able to add several messages between ==
             }else{
+                ini_lib_path <- base:::.libPaths(new = , include.site = TRUE) # normal to have empty new argument
+                base::on.exit(expr = base:::.libPaths(new = ini_lib_path, include.site = TRUE), add = TRUE, after = TRUE) # return to the previous libPaths()
                 base:::.libPaths(new = base::sub(x = lib_path, pattern = "/$|\\\\$", replacement = "", ignore.case = FALSE, perl = FALSE, fixed = FALSE, useBytes = FALSE), include.site = TRUE) # base:::.libPaths(new = ) add path to default path. BEWARE: base:::.libPaths() does not support / at the end of a submitted path. The reason of the check and replacement of the last / or \\ in path
                 lib_path <- base:::.libPaths(new = , include.site = TRUE) # normal to have empty new argument
             }
@@ -317,9 +351,9 @@ BACKBONE <- function(data, arg1 = "test", seed = NULL, lib_path = NULL, safer_ch
     if (base::exists(x = ".Random.seed", where = -1, envir = .GlobalEnv, frame = , mode = "any", inherits = TRUE)) {
         # if .Random.seed does not exists, it means that no random operation has been performed yet in any R environment
         tempo.random.seed <- .Random.seed
-        base::on.exit(expr = base::assign(x = ".Random.seed", value = tempo.random.seed, pos = -1, envir = .GlobalEnv, inherits = FALSE, immediate = TRUE), add = FALSE, after = TRUE)
+        base::on.exit(expr = base::assign(x = ".Random.seed", value = tempo.random.seed, pos = -1, envir = .GlobalEnv, inherits = FALSE, immediate = TRUE), add = TRUE, after = TRUE)
     }else{
-        base::on.exit(expr = base::set.seed(seed = NULL, kind = NULL, normal.kind = NULL, sample.kind = NULL), add = FALSE, after = TRUE) # inactivate seeding -> return to complete randomness
+        base::on.exit(expr = base::set.seed(seed = NULL, kind = NULL, normal.kind = NULL, sample.kind = NULL), add = TRUE, after = TRUE) # inactivate seeding -> return to complete randomness
     }
     base::set.seed(seed = seed, kind = NULL, normal.kind = NULL, sample.kind = NULL) # seed value is the seed argument of the function
     ######## end code that protects set.seed() in the global environment
