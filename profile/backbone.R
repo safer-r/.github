@@ -95,7 +95,7 @@ BACKBONE <- function(data, arg1 = "test", seed = NULL, lib_path = NULL, safer_ch
     ######## end arg with no default values
 
     ######## management of NULL arguments
-    # before NA checking because is.na(NULL) return logical(0) and all(logical(0)) is TRUE
+    # before NA checking because is.na(NULL) return logical(0) and all(logical(0)) is TRUE (but secured with & base::length(x = x) > 0)
     tempo_arg <-base::c(
         "data", 
         "arg1",
@@ -119,10 +119,20 @@ BACKBONE <- function(data, arg1 = "test", seed = NULL, lib_path = NULL, safer_ch
     ######## end management of NULL arguments
 
     ######## management of empty non NULL arguments
-    if(base::length(x = arg_user_setting_eval) != 0){
+    # # before NA checking because is.na(logical()) is logical(0) (but secured with & base::length(x = x) > 0)
+    tempo_arg <-base::c(
+        # "data", # inactivated because can be empty
+        "arg1",
+        "seed",
+        "safer_check", 
+        "lib_path",
+        "error_text"
+    )
+    tempo_arg_user_setting_eval <- arg_user_setting_eval[base::names(arg_user_setting_eval) %in% tempo_arg]
+    if(base::length(x = tempo_arg_user_setting_eval) != 0){
         tempo_log <- base::suppressWarnings(
             expr = base::sapply(
-                X = arg_user_setting_eval, 
+                X = tempo_arg_user_setting_eval, 
                 FUN = function(x){
                     base::length(x = x) == 0 & ! base::is.null(x = x)
                 }, 
@@ -136,7 +146,7 @@ BACKBONE <- function(data, arg1 = "test", seed = NULL, lib_path = NULL, safer_ch
                 error_text_start, 
                 base::ifelse(test = base::sum(tempo_log, na.rm = TRUE) > 1, yes = "THESE ARGUMENTS", no = "THIS ARGUMENT"), 
                 " CANNOT BE AN EMPTY NON NULL OBJECT:\n", 
-                base::paste0(arg_user_setting_names[tempo_log], collapse = "\n", recycle0 = FALSE), 
+                base::paste0(tempo_arg_user_setting_eval[tempo_log], collapse = "\n", recycle0 = FALSE), 
                 collapse = NULL, 
                 recycle0 = FALSE
             )
@@ -152,11 +162,11 @@ BACKBONE <- function(data, arg1 = "test", seed = NULL, lib_path = NULL, safer_ch
                 X = base::lapply(
                     X = arg_user_setting_eval, 
                     FUN = function(x){
-                        base::is.na(x = x)
+                        base::is.na(x = x) # if x is empty, return empty, but ok with below
                     }
                 ), 
                 FUN = function(x){
-                    base::all(x = x, na.rm = TRUE) & base::length(x = x) > 0
+                    base::all(x = x, na.rm = TRUE) & base::length(x = x) > 0 # if x is empty, return FALSE, so OK
                 }, 
                 simplify = TRUE, 
                 USE.NAMES = TRUE
