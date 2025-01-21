@@ -479,5 +479,5 @@ BACKBONE <- function(data, arg1 = "test", seed = NULL, lib_path = NULL, safer_ch
     }
     base::on.exit(expr = base::options(warning.length = ini_warning_length), add = TRUE, after = TRUE)
     #### end warning output
-    
 }
+
