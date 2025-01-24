@@ -459,12 +459,8 @@ BACKBONE <- function(data, arg1 = "test", seed = NULL, lib_path = NULL, safer_ch
     ######## end reserved word checking
 
     #### end main code
-
-    #### output
-    base::return(output)
-    #### end output
-
     #### warning output
+    # must be before return()
     if( ! base::is.null(x = warn)){
         base::on.exit(
             expr = base::warning(
@@ -479,5 +475,10 @@ BACKBONE <- function(data, arg1 = "test", seed = NULL, lib_path = NULL, safer_ch
     }
     base::on.exit(expr = base::options(warning.length = ini_warning_length), add = TRUE, after = TRUE)
     #### end warning output
+
+    #### output
+    base::return(output)
+    #### end output
+
 }
 
