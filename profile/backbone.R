@@ -1,4 +1,11 @@
-BACKBONE <- function(data, arg1 = "test", seed = NULL, lib_path = NULL, safer_check = TRUE, error_text = ""){ 
+BACKBONE <- function(
+    data, 
+    arg1 = "test", 
+    seed = NULL, 
+    lib_path = NULL, # mandatory argument of safer functions
+    safer_check = TRUE, # mandatory argument of safer functions
+    error_text = "" # mandatory argument of safer functions. Warning: only argument that cannot be without value, because the safer function would return a R classical non traced error message
+){ 
 
     #### package name
     package_name <- "saferDev" # write NULL if the function developed is not in a package
@@ -442,7 +449,7 @@ BACKBONE <- function(data, arg1 = "test", seed = NULL, lib_path = NULL, safer_ch
         tempo_log <- base::names(x = data) %in% reserved_words
         tempo_cat <- base::paste0(
             error_text_start, 
-            "COLUMN NAMES OF THE data1 ARGUMENT CANNOT BE ", 
+            "COLUMN NAMES OF THE data ARGUMENT CANNOT BE ", 
             base::ifelse(test = base::length(x = reserved_words) == 1, yes = "THIS WORD", no = "ONE OF THESE WORDS"), 
             ":\n", 
             base::paste0(reserved_words, collapse = "\n", recycle0 = FALSE), 
@@ -459,6 +466,7 @@ BACKBONE <- function(data, arg1 = "test", seed = NULL, lib_path = NULL, safer_ch
     ######## end reserved word checking
 
     #### end main code
+
     #### warning output
     # must be before return()
     if( ! base::is.null(x = warn)){
