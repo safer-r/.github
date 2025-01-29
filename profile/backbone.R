@@ -4,7 +4,7 @@ BACKBONE <- function(
     seed = NULL, 
     lib_path = NULL, # mandatory argument of safer functions
     safer_check = TRUE, # mandatory argument of safer functions
-    error_text = "" # mandatory argument of safer functions. Warning: only argument that cannot be without value, because the safer function would return a R classical non traced error message
+    error_text = "" # mandatory argument of safer functions. Warning: only argument that should not be without dafault value, because the safer function would return a R classical non traced error message
 ){ 
 
     #### package name
@@ -135,7 +135,7 @@ BACKBONE <- function(
         "lib_path"
         # "error_text" # inactivated because empty value converted to "" above
     )
-    tempo_arg_user_setting_eval <- arg_user_setting_eval[base::names(arg_user_setting_eval) %in% tempo_arg]
+    tempo_arg_user_setting_eval <- arg_user_setting_eval[base::names(x = arg_user_setting_eval) %in% tempo_arg]
     if(base::length(x = tempo_arg_user_setting_eval) != 0){
         tempo_log <- base::suppressWarnings(
             expr = base::sapply(
@@ -256,9 +256,17 @@ BACKBONE <- function(
     if(safer_check == TRUE){
         saferDev:::.pack_and_function_check(
             fun = base::c(
+                # functions required in this code
                 "saferDev::arg_check", # write each function preceeded by their package name
-                "saferDev:::.base_op_check", 
-                "lubridate::seconds_to_period"
+                "lubridate::seconds_to_period", 
+                # end functions required in this code
+
+                # internal functions required in this code
+                "saferDev:::.base_op_check"
+                # end internal functions required in this code
+
+                # functions required in internal functions above (i.e., :::.FUNCTION_NAME), because presence not checked in internal functions
+                # end functions required in internal functions above (i.e., :::.FUNCTION_NAME), because presence not checked in internal functions
             ),
             lib_path = lib_path, # write NULL if your function does not have any lib_path argument
             error_text = embed_error_text
