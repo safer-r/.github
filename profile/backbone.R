@@ -147,7 +147,7 @@ BACKBONE <- function(
                 USE.NAMES = TRUE
             ), 
             classes = "warning"
-        ) # no argument provided by the user can be empty non NULL object. Warning: would not work if arg_user_setting_eval is a vector (because treat each element as a compartment), but ok because it is always a list, even is 0 or 1 argument in the developed function
+        ) # no argument provided by the user can be empty non NULL object. Warning: would not work if arg_user_setting_eval is a vector (because treat each element as a compartment), but ok because it is always a list, even if 0 or 1 argument in the developed function
         if(base::any(tempo_log, na.rm = TRUE)){
             tempo_cat <- base::paste0(
                 error_text_start, 
@@ -316,7 +316,7 @@ BACKBONE <- function(
     # end for arguments that need several times the use of arg_check
     # lib_path already checked above
     # safer_check already checked above
-    # error_text already checked above
+    # error_text converted to single string above
     if( ! base::is.null(x = argum_check)){
         if(base::any(argum_check, na.rm = TRUE)){
             base::stop(base::paste0("\n\n================\n\n", base::paste0(text_check[argum_check], collapse = "\n\n", recycle0 = FALSE), "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL)
