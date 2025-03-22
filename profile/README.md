@@ -38,7 +38,7 @@
     <pre>[1] TRUE</pre>
     Which is hard to handle when using `all()` in a `if(){}` condition statement.
 
-    To the opposite, but also hard to handl is the `any()` function that returns `FALSE` when empty:
+    To the opposite, but also hard to handle is the `any()` function that returns `FALSE` when empty:
     ```
     any() # result identical with any(logical())
     ```
@@ -139,12 +139,12 @@ The safer project gathers R functions of class S3 with a similar encoding that b
 Functions of class S3 from the safer project present the same encoding structure before the 'main' code section (see the [backbone.R](./backbone.R) file), which tackle the aspects described above, including:
 - Reproducibility
     - Package systematically indicated for any used function (R Scope seeking controlled). Example `base::paste()` instead of `paste()`.
-    - All the arguments of functions written, even if default values are used, to prevent argument name change or default value change (like the `stringsAsFactors` argument of `read.table()`, for which default value changed from TRUE to FALSE since R version 4.0). Example `base::sum(1:3, na.rm = FALSE)` instead of `base::sum(1:3)`.
+    - All the arguments of functions written, even if default values are used, to prevent argument name change or default value change (like the `stringsAsFactors` argument of `read.table()`, for which default value changed from `TRUE` to `FALSE` since R version 4.0). Example `base::sum(1:3, na.rm = FALSE)` instead of `base::sum(1:3)`.
     - Argument `safer_check` added in each safer function, that checks 1) the presence in local R library folders of all the non basic functions and corresponding packages used in the code and 2) that all the classical R operators (`<-`, `(`, etc.) are not overwritten by other packages, since these packages always preceed the base R items in the R scope.
     - Seeding of the random number generator using an argument each time randomness is used, and protecting potential seeding in the global environment.
 - Intuitiveness
     - Argument `...` not authorized in safer functions.
-    - Argument with `NA` only not authorized in safer functions, in order to deal with `if(all(X, na.rm = TRUE)){}` that would return `TRUE` if `X` is only made of `NA`.
+    - Argument with `NA` as only value not authorized in safer functions, in order to deal with `if(all(X, na.rm = TRUE)){}` that would return `TRUE` if `X` is only made of `NA`.
 - Explicit messages
     - Name of the functions and corresponding packages in all error and warning messages, including the embedding functions, so that we better know the origin of the message.
     - Explicit error messages,
