@@ -154,6 +154,7 @@ Functions of class S3 from the safer project present the same encoding structure
         - Expected class, type, mode, length, restricted values panel, kind of numeric values in addition to the distinction between 'integer' and 'double' (proportion only? Inf values authorized? negative values authorized?).
         - Authorized `NA` (among other values, never as unique value) or not.
         - Authorized `NULL` value or not.
+        - Authorized empty value or not (empty list for instance).
         - Authorized `` value in vector of characters or not.
         - Expected structure of complex objects, like data frames and lists.
 <br /><br />
