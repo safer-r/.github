@@ -155,7 +155,7 @@ Functions of class S3 from the safer project present the same encoding structure
         - Authorized `NA` (among other values, never as unique value) or not.
         - Authorized `NULL` value or not.
         - Authorized empty value or not (empty list for instance).
-        - Authorized `` value in vector of characters or not.
+        - Authorized `""` value in vector of characters or not.
         - Expected structure of complex objects, like data frames and lists.
 <br /><br />
 ## Make a safer function
