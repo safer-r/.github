@@ -132,7 +132,7 @@
     The error message does not mention that `fun2(x)` generated the error.
 <br /><br />
 
-The safer project gathers R functions of class S3 with a similar encoding that better controls their expected behavior.
+Problems are recapitulated in websites, like [`R inferno`](https://www.burns-stat.com/pages/Tutor/R_inferno.pdf). The safer project gathers R functions of class S3 with a similar encoding that better controls their expected behavior.
 <br /><br />
 ## Features of the safer functions
 
