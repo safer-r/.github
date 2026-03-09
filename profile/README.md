@@ -1,8 +1,8 @@
 
 
-# The safer project <a href=""><img src="./safer_logo.png" align="right" height="140" /></a>
+# The safer-r project <a href=""><img src="./safer_logo.png" align="right" height="140" /></a>
 
-## Why the safer project?
+## Why the safer-r project?
 
 [R](https://www.r-project.org) is a permissive programming language: it will 'try to work' in many situations and returns something, when other programming languages would have returned an error. This advantage partly explains its success, as it is commonly used by non programers. But it comes with several problems which could soften accuracy or consistency aspects:
 - **Non intuitive behaviors.**
@@ -132,15 +132,15 @@
     The error message does not mention that `fun2(x)` generated the error.
 <br /><br />
 
-Problems are recapitulated in websites, like [`R inferno`](https://www.burns-stat.com/pages/Tutor/R_inferno.pdf). The safer project gathers R functions of class S3 with a similar encoding that better controls their expected behavior.
+Problems are recapitulated in websites, like [`R inferno`](https://www.burns-stat.com/pages/Tutor/R_inferno.pdf). The safer-r project gathers R functions of class S3 with a similar encoding that better controls their expected behavior.
 <br /><br />
-## Features of the safer functions
+## Features of the safer-r functions
 
-Functions of class S3 from the safer project present the same encoding structure before the 'main' code section (see the [backbone.R](./backbone.R) file), which tackle the aspects described above, including:
+Functions of class S3 from the safer-r project present the same encoding structure before the 'main' code section (see the [backbone.R](./backbone.R) file), which tackle the aspects described above, including:
 - Accuracy
     - Package systematically indicated for any used function (R Scope seeking controlled). Example `base::paste()` instead of `paste()`.
     - All the arguments of functions written, even if default values are used, to prevent argument name change or default value change (like the `stringsAsFactors` argument of `read.table()`, for which default value changed from `TRUE` to `FALSE` since R version 4.0). Example `base::sum(1:3, na.rm = FALSE)` instead of `base::sum(1:3)`.
-    - Argument `safer_check` added in each safer function, that checks 1) the presence in local R library folders of all the non basic functions and corresponding packages used in the code and 2) that all the classical R operators (`<-`, `(`, etc.) are not overwritten by other packages, since these packages always preceed the base R items in the R scope.
+    - Argument `safer_check` added in each safer-r function, that checks 1) the presence in local R library folders of all the non basic functions and corresponding packages used in the code and 2) that all the classical R operators (`<-`, `(`, etc.) are not overwritten by other packages, since these packages always preceed the base R items in the R scope.
     - Strong checking of each argument, for instance: 
         - Values for arguments with no default values.
         - Expected class, type, mode, length, restricted values panel, kind of numeric values in addition to the distinction between 'integer' and 'double' (proportion only? Inf values authorized? negative values authorized?).
@@ -151,26 +151,26 @@ Functions of class S3 from the safer project present the same encoding structure
         - Expected structure of complex objects, like data frames and lists.
     - Seeding of the random number generator using an argument each time randomness is used, and protecting potential seeding in the global environment.
 - Intuitiveness
-    - Argument `...` not authorized in safer functions.
-    - Argument with `NA` as only value not authorized in safer functions, in order to deal with `if(all(X, na.rm = TRUE)){}` that would return `TRUE` if `X` is only made of `NA`.
+    - Argument `...` not authorized in safer-r functions.
+    - Argument with `NA` as only value not authorized in safer-r functions, in order to deal with `if(all(X, na.rm = TRUE)){}` that would return `TRUE` if `X` is only made of `NA`.
 - Explicit messages
     - Name of the functions and corresponding packages in all error and warning messages, including the embedding functions, so that we better know the origin of the message.
     - Explicit error messages,
     - All warning messages added in the error message string.
 <br /><br />
-## Make a safer function
+## Make a safer-r function
 
 - Recover the [Backbone.R code](https://github.com/safer-r/.github/tree/main/profile).
 - Follow the instructions [here](https://gael-millot.github.io/protocols/docs/Protocol%20167-rev0%20BACKBONE%20OF%20SAFER%20R%20FUNCTIONS.htm).
-- Warning: all the safer functions inside another safer function must have the safer_ckeck argument set to FALSE, to avoid repetitive checkings that would exponentially increase the function execution time.
+- Warning: all the safer-r functions inside another safer-r function must have the safer_ckeck argument set to FALSE, to avoid repetitive checkings that would exponentially increase the function execution time.
 <br /><br />
-## Make a safer script
+## Make a safer-r script
 
 - Could this script be written as a function?
 <br /><br />
-## safer Packages
+## safer-r Packages
 
-Functions from all these packages use the safer backbone and, thus, respect the criteria of the safer project.
+Functions from all these packages use the safer-r backbone and, thus, respect the criteria of the safer-r project.
 
 - [saferDev](https://github.com/safer-r/saferDev): R function and pipeline development.
 - [saferMatrix](https://github.com/safer-r/saferMatrix): matrix handling.
