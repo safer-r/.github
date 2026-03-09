@@ -4,7 +4,7 @@
 
 ## Why the safer project?
 
-[R](https://www.r-project.org) is a permissive programming language: it will 'try to work' in many situations and returns something, when other programming languages would have returned an error. This advantage partly explains its success, as it is commonly used by non programers. But it comes with several problems which could soften reproducibility or consistency aspects:
+[R](https://www.r-project.org) is a permissive programming language: it will 'try to work' in many situations and returns something, when other programming languages would have returned an error. This advantage partly explains its success, as it is commonly used by non programers. But it comes with several problems which could soften accuracy or consistency aspects:
 - **Non intuitive behaviors.**
 
     - Example with the `sample()` function:
@@ -137,18 +137,10 @@ Problems are recapitulated in websites, like [`R inferno`](https://www.burns-sta
 ## Features of the safer functions
 
 Functions of class S3 from the safer project present the same encoding structure before the 'main' code section (see the [backbone.R](./backbone.R) file), which tackle the aspects described above, including:
-- Reproducibility
+- Accuracy
     - Package systematically indicated for any used function (R Scope seeking controlled). Example `base::paste()` instead of `paste()`.
     - All the arguments of functions written, even if default values are used, to prevent argument name change or default value change (like the `stringsAsFactors` argument of `read.table()`, for which default value changed from `TRUE` to `FALSE` since R version 4.0). Example `base::sum(1:3, na.rm = FALSE)` instead of `base::sum(1:3)`.
     - Argument `safer_check` added in each safer function, that checks 1) the presence in local R library folders of all the non basic functions and corresponding packages used in the code and 2) that all the classical R operators (`<-`, `(`, etc.) are not overwritten by other packages, since these packages always preceed the base R items in the R scope.
-    - Seeding of the random number generator using an argument each time randomness is used, and protecting potential seeding in the global environment.
-- Intuitiveness
-    - Argument `...` not authorized in safer functions.
-    - Argument with `NA` as only value not authorized in safer functions, in order to deal with `if(all(X, na.rm = TRUE)){}` that would return `TRUE` if `X` is only made of `NA`.
-- Explicit messages
-    - Name of the functions and corresponding packages in all error and warning messages, including the embedding functions, so that we better know the origin of the message.
-    - Explicit error messages,
-    - All warning messages added in the error message string.
     - Strong checking of each argument, for instance: 
         - Values for arguments with no default values.
         - Expected class, type, mode, length, restricted values panel, kind of numeric values in addition to the distinction between 'integer' and 'double' (proportion only? Inf values authorized? negative values authorized?).
@@ -157,6 +149,14 @@ Functions of class S3 from the safer project present the same encoding structure
         - Authorized empty value or not (empty list for instance).
         - Authorized `""` value in vector of characters or not.
         - Expected structure of complex objects, like data frames and lists.
+    - Seeding of the random number generator using an argument each time randomness is used, and protecting potential seeding in the global environment.
+- Intuitiveness
+    - Argument `...` not authorized in safer functions.
+    - Argument with `NA` as only value not authorized in safer functions, in order to deal with `if(all(X, na.rm = TRUE)){}` that would return `TRUE` if `X` is only made of `NA`.
+- Explicit messages
+    - Name of the functions and corresponding packages in all error and warning messages, including the embedding functions, so that we better know the origin of the message.
+    - Explicit error messages,
+    - All warning messages added in the error message string.
 <br /><br />
 ## Make a safer function
 
