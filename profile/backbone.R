@@ -341,6 +341,8 @@ BACKBONE <- function(
         # "lib_path" # inactivated because already checked above
         # "error_text" # inactivated because can be ""
     )
+    # nocov start
+    # codecov inactivated because it is an internal control of code writing, impossible to cover with argument values.
     tempo_log <- ! base::sapply(X = base::lapply(X = tempo_arg, FUN = function(x){base::get(x = x, pos = -1L, envir = base::parent.frame(n = 2), mode = "any", inherits = FALSE)}), FUN = function(x){if(base::is.null(x = x)){base::return(TRUE)}else{base::all(base::mode(x = x) == "character", na.rm = TRUE)}}, simplify = TRUE, USE.NAMES = TRUE) # parent.frame(n = 2) because sapply(lapply())  #  need to test is.null() here
     if(base::any(tempo_log, na.rm = TRUE)){
         # This check is here in case the developer has not correctly fill tempo_arg
@@ -356,6 +358,7 @@ BACKBONE <- function(
             recycle0 = FALSE
         )
         base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL)
+        # nocov end
     }else{
         tempo_log <- base::sapply(X = base::lapply(X = tempo_arg, FUN = function(x){base::get(x = x, pos = -1L, envir = base::parent.frame(n = 2), mode = "any", inherits = FALSE)}), FUN = function(x){base::any(x == "", na.rm = TRUE)}, simplify = TRUE, USE.NAMES = TRUE) # parent.frame(n = 2) because sapply(lapply()).  # for character argument that can also be NULL, if NULL -> returns FALSE. Thus no need to test is.null()
         if(base::any(tempo_log, na.rm = TRUE)){
@@ -402,6 +405,9 @@ BACKBONE <- function(
     ######## graphic device checking
     # check the number of graphic devices on exit
     dev_list <- grDevices::dev.list() 
+    # This check is here in case the developer has not correctly fill tempo_arg
+    # nocov start
+    # codecov inactivated because it is an internal control of code writing, impossible to cover with argument values.
     base::on.exit(
         expr = if(base::length(x = dev_list) != base::length(x = grDevices::dev.list())){
             tempo_cat <- base::paste0(
@@ -423,10 +429,12 @@ BACKBONE <- function(
                 recycle0 = FALSE
             )
             base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL)
+
         }, 
         add = TRUE, 
         after = TRUE
     )
+    # nocov end
     # end check the number of graphic devices on exit
     # restore the graphic parameters on exit
     if(base::length(x = grDevices::dev.list()) > 0){
@@ -477,7 +485,29 @@ BACKBONE <- function(
             collapse = NULL, 
             recycle0 = FALSE
         )
-        base::stop(base::paste0("\n\n================\n\n", tempo.cat, "\n\n================\n\n", base::ifelse(test = base::is.null(x = warn), yes = "", no = base::paste0("IN ADDITION\nWARNING", base::ifelse(test = warn_count > 1, yes = "S", no = ""), ":\n\n", warn, collapse = NULL, recycle0 = FALSE)), collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL)
+        base::stop(
+            base::paste0(
+                "\n\n================\n\n", 
+                tempo_cat, 
+                "\n\n================\n\n", 
+                base::ifelse(
+                    test = base::is.null(x = warn), 
+                    yes = "", 
+                    no = base::paste0(
+                        "IN ADDITION\nWARNING", 
+                        base::ifelse(test = warn_count > 1, yes = "S", no = ""), 
+                        ":\n\n", 
+                        warn, 
+                        collapse = NULL, 
+                        recycle0 = FALSE
+                    )
+                ), 
+                collapse = NULL, 
+                recycle0 = FALSE
+            ), 
+            call. = FALSE, 
+            domain = NULL
+        )
     }
     ######## end reserved word checking
 
