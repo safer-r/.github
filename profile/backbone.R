@@ -218,7 +218,7 @@ BACKBONE <- function(
 
     ######## check of lib_path
     # must be before any :: or ::: non basic package calling
-    if(safer_check == TRUE){
+    if(safer_check == TRUE){ # this line must be inactivated if you want to use lib_path in the main code (other than in safer functions present in the main code) 
         if( ! base::is.null(x = lib_path)){ #  is.null(NA) returns FALSE so OK.
             if( ! base::all(base::typeof(x = lib_path) == "character", na.rm = TRUE)){ # na.rm = TRUE but no NA returned with typeof (typeof(NA) == "character" returns FALSE)
                 if(base::all(base::mode(x = lib_path) == "function", na.rm = TRUE)){
@@ -257,7 +257,7 @@ BACKBONE <- function(
         }else{
             lib_path <- base:::.libPaths(new = , include.site = TRUE) # normal to have empty new argument # base:::.libPaths(new = lib_path) # or base:::.libPaths(new = base::c(base:::.libPaths(), lib_path))
         }
-    }
+    }  # this line must be inactivated if you want to use lib_path in the main code (other than in safer functions present in the main code) 
     ######## end check of lib_path
 
     ######## check of the required functions from the required packages
