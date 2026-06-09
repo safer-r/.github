@@ -1,7 +1,7 @@
 BACKBONE <- function(
-    data, 
-    arg1 = "test", 
-    seed = NULL, 
+    data, # example of argument. Adapt to your own function
+    arg1 = "test", # example of argument. Adapt to your own function or remove
+    seed = NULL, # remove this argument if no random seed setting required
     lib_path = NULL, # mandatory argument of safer functions
     safer_check = TRUE, # mandatory argument of safer functions
     error_text = "" # mandatory argument of safer functions. Warning: only argument that should not be without dafault value, because the safer function would return a R classical non traced error message
@@ -75,7 +75,7 @@ BACKBONE <- function(
     ######## end internal error text
 
     ######## error text when embedding
-    # use this in the error_text of safer functions if present below 
+    # use this in the error_text of safer functions if present in your main code 
     embed_error_text  <- base::sub(pattern = "^ERROR IN ", replacement = " INSIDE ", x = error_text_start, ignore.case = FALSE, perl = FALSE, fixed = FALSE, useBytes = FALSE)
     embed_error_text  <- base::sub(pattern = "\n*$", replacement = "", x = embed_error_text, ignore.case = FALSE, perl = FALSE, fixed = FALSE, useBytes = FALSE) # remove all the trailing \n, because added later
     ######## end error text when embedding
@@ -84,7 +84,24 @@ BACKBONE <- function(
 
     #### argument primary checking
 
+    ######## arg ... forbidden
+    # nocov start
+    # codecov inactivated because it is an internal control of code writing, impossible to cover with argument values.
+    if("..." %in% arg_names) {
+        # This check is here in case the developer has not correctly written the argument of its function
+        tempo_cat <- base::paste0(
+            error_text_start, 
+            "ARGUMENT ... IS NOT ALLOWED IN SAFER-R FUNCTIONS.\n\nPLEASE, REWRITE YOUR FUNCTION CORRECTLY.", 
+            collapse = NULL, 
+            recycle0 = FALSE
+        )
+        base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL)
+    }
+    # nocov end
+    ######## end arg ... forbidden
+
     ######## arg with no default values
+    # optional section: remove the code if none of your arguments has no default value
     mandat_args <- base::c(
         "data"
     )
@@ -267,15 +284,10 @@ BACKBONE <- function(
             fun = base::c(
                 # functions required in this code
                 "saferDev::arg_check", # write each function preceeded by their package name
-                "lubridate::seconds_to_period", 
                 # end functions required in this code
-
                 # internal functions required in this code
                 "saferDev:::.base_op_check"
                 # end internal functions required in this code
-
-                # functions required in internal functions above (i.e., :::.FUNCTION_NAME), because presence not checked in internal functions
-                # end functions required in internal functions above (i.e., :::.FUNCTION_NAME), because presence not checked in internal functions
             ),
             lib_path = lib_path, # write NULL if your function does not have any lib_path argument
             error_text = embed_error_text
@@ -286,6 +298,8 @@ BACKBONE <- function(
     ######## escaping CRAN submission NOTE for internal functions
 
     .base_op_check <- utils::getFromNamespace(x = ".base_op_check", ns = "saferDev", pos = , envir = )
+    # add here in the internal functions that are used in your main code (copy-paste the line above and replace .base_op_check by the name of the internal function
+    # not mandatory if your function is not designed for submission to the CRAN
 
     ######## end escaping CRAN submission NOTE for internal functions
 
@@ -307,28 +321,29 @@ BACKBONE <- function(
     checked_arg_names <- NULL # for function debbuging: used by r_debugging_tools
     arg_check_error_text <- base::paste0("ERROR ", embed_error_text, "\n\n", collapse = NULL, recycle0 = FALSE) # must be used instead of error_text = embed_error_text when several arg_check are performed on the same argument (tempo1, tempo2, see below)
     ee <- base::expression(argum_check <- base::c(argum_check, tempo$problem) , text_check <- base::c(text_check, tempo$text) , checked_arg_names <- base::c(checked_arg_names, tempo$object.name))
-    # add as many lines as below, for each of your arguments of your function in development
-    tempo <- saferDev::arg_check(data = data, class = NULL, typeof = NULL, mode = "numeric", length = NULL, prop = FALSE, double_as_integer_allowed = FALSE, options = NULL, all_options_in_data = FALSE, na_contain = TRUE, neg_values = TRUE, inf_values = TRUE, print = FALSE, data_name = NULL, data_arg = TRUE, safer_check = FALSE, lib_path = lib_path, error_text = embed_error_text) ; base::eval(expr = ee, envir = base::environment(fun = NULL), enclos = base::environment(fun = NULL)) # copy - paste this line as much as necessary
-    tempo <- saferDev::arg_check(data = arg1, class = "vector", typeof = NULL, mode = "character", length = 1, prop = FALSE, double_as_integer_allowed = FALSE, options = NULL, all_options_in_data = FALSE, na_contain = TRUE, neg_values = TRUE, inf_values = TRUE, print = FALSE, data_name = NULL, data_arg = TRUE, safer_check = FALSE, lib_path = lib_path, error_text = embed_error_text) ; base::eval(expr = ee, envir = base::environment(fun = NULL), enclos = base::environment(fun = NULL)) # copy - paste this line as much as necessary
-    if( ! base::is.null(x = seed)){ # for all arguments that can be NULL, write like this:
+    # copy - paste ththe line below as much, one for each of the arguments of your own function
+    tempo <- saferDev::arg_check(data = data, class = NULL, typeof = NULL, mode = "numeric", length = NULL, prop = FALSE, double_as_integer_allowed = FALSE, options = NULL, all_options_in_data = FALSE, na_contain = TRUE, neg_values = TRUE, inf_values = TRUE, print = FALSE, data_name = NULL, data_arg = TRUE, safer_check = FALSE, lib_path = lib_path, error_text = embed_error_text) ; base::eval(expr = ee, envir = base::environment(fun = NULL), enclos = base::environment(fun = NULL)) # example of setting. Adapt to your own function
+    tempo <- saferDev::arg_check(data = arg1, class = "vector", typeof = NULL, mode = "character", length = 1, prop = FALSE, double_as_integer_allowed = FALSE, options = NULL, all_options_in_data = FALSE, na_contain = TRUE, neg_values = TRUE, inf_values = TRUE, print = FALSE, data_name = NULL, data_arg = TRUE, safer_check = FALSE, lib_path = lib_path, error_text = embed_error_text) ; base::eval(expr = ee, envir = base::environment(fun = NULL), enclos = base::environment(fun = NULL)) # example of setting. Adapt to your own function or remove
+    # for all arguments that can be NULL, write like this:
+    if( ! base::is.null(x = seed)){ # remove this argument checking if your own function has no seed argument
         tempo <- saferDev::arg_check(data = seed, class = "vector", typeof = "integer", mode = NULL, length = NULL, prop = FALSE, double_as_integer_allowed = TRUE, options = NULL, all_options_in_data = FALSE, na_contain = FALSE, neg_values = TRUE, inf_values = FALSE, print = FALSE, data_name = NULL, data_arg = TRUE, safer_check = FALSE, lib_path = lib_path, error_text = embed_error_text) ; base::eval(expr = ee, envir = base::environment(fun = NULL), enclos = base::environment(fun = NULL))
     }
-    # for arguments that need several times the use of arg_check
-    tempo1 <- saferDev::arg_check(data = data, class = "vector", typeof = NULL, mode = "character", length = 1, prop = FALSE, double_as_integer_allowed = FALSE, options = NULL, all_options_in_data = FALSE, na_contain = TRUE, neg_values = TRUE, inf_values = TRUE, print = FALSE, data_name = NULL, data_arg = TRUE, safer_check = FALSE, lib_path = lib_path, error_text = embed_error_text)
-    tempo2 <- saferDev::arg_check(data = data, class = "factor", typeof = NULL, mode = NULL, length = 1, prop = FALSE, double_as_integer_allowed = FALSE, options = NULL, all_options_in_data = FALSE, na_contain = TRUE, neg_values = TRUE, inf_values = TRUE, print = FALSE, data_name = NULL, data_arg = TRUE, safer_check = FALSE, lib_path = lib_path, error_text = embed_error_text)
-    tempo3 <- saferDev::arg_check(data = data, class = "integer", typeof = NULL, mode = NULL, length = 1, prop = FALSE, double_as_integer_allowed = FALSE, options = NULL, all_options_in_data = FALSE, na_contain = TRUE, neg_values = TRUE, inf_values = TRUE, print = FALSE, data_name = NULL, data_arg = TRUE, safer_check = FALSE, lib_path = lib_path, error_text = embed_error_text) # not need to test inf with integers
-    if(tempo1$problem == TRUE & tempo2$problem == TRUE & tempo3$problem == TRUE){
-        tempo.cat <- base::paste0(
-            arg_check_error_text, 
-            "data ARGUMENT MUST BE (1) A VECTOR OF STRINGS, (2) A FACTOR OR (3) A VECTOR OF INTEGERS",
-            collapse = NULL, 
-            recycle0 = FALSE
-        )
-        text.check <- base::c(text.check, tempo.cat)
-        argum.check <- base::c(argum.check, TRUE)
-        checked.arg.names <- base::c(checked.arg.names, tempo1$object.name)
-    }
-    # end for arguments that need several times the use of arg_check
+    # example of writing for arguments that need several times the use of arg_check. Adapt to your own function or remove
+            tempo1 <- saferDev::arg_check(data = data, class = "vector", typeof = NULL, mode = "character", length = 1, prop = FALSE, double_as_integer_allowed = FALSE, options = NULL, all_options_in_data = FALSE, na_contain = TRUE, neg_values = TRUE, inf_values = TRUE, print = FALSE, data_name = NULL, data_arg = TRUE, safer_check = FALSE, lib_path = lib_path, error_text = embed_error_text)
+            tempo2 <- saferDev::arg_check(data = data, class = "factor", typeof = NULL, mode = NULL, length = 1, prop = FALSE, double_as_integer_allowed = FALSE, options = NULL, all_options_in_data = FALSE, na_contain = TRUE, neg_values = TRUE, inf_values = TRUE, print = FALSE, data_name = NULL, data_arg = TRUE, safer_check = FALSE, lib_path = lib_path, error_text = embed_error_text)
+            tempo3 <- saferDev::arg_check(data = data, class = "integer", typeof = NULL, mode = NULL, length = 1, prop = FALSE, double_as_integer_allowed = FALSE, options = NULL, all_options_in_data = FALSE, na_contain = TRUE, neg_values = TRUE, inf_values = TRUE, print = FALSE, data_name = NULL, data_arg = TRUE, safer_check = FALSE, lib_path = lib_path, error_text = embed_error_text) # not need to test inf with integers
+            if(tempo1$problem == TRUE & tempo2$problem == TRUE & tempo3$problem == TRUE){
+                tempo.cat <- base::paste0(
+                    arg_check_error_text, 
+                    "data ARGUMENT MUST BE (1) A VECTOR OF STRINGS, (2) A FACTOR OR (3) A VECTOR OF INTEGERS",
+                    collapse = NULL, 
+                    recycle0 = FALSE
+                )
+                text.check <- base::c(text.check, tempo.cat)
+                argum.check <- base::c(argum.check, TRUE)
+                checked.arg.names <- base::c(checked.arg.names, tempo1$object.name)
+            }
+    # end for arguments that need several times the use of arg_check. Adapt to your own function or remove
     # lib_path already checked above
     # safer_check already checked above
     # error_text converted to single string above
@@ -343,6 +358,7 @@ BACKBONE <- function(
     ######## end argument checking with arg_check()
 
     ######## management of "" in arguments of mode character
+    # optional section: remove the code if you do not want to check if arguments of mode character of your own function cannot contain ""
     tempo_arg <- base::c(
         "arg1"
         # "lib_path" # inactivated because already checked above
@@ -386,11 +402,8 @@ BACKBONE <- function(
 
     #### second round of checking and data preparation
 
-    ######## reserved words
-    reserved_words <- base::c("fake_x", "fake_y", "fake_categ", "color")
-    ######## end reserved words
-
     ######## code that protects set.seed() in the global environment
+    # optional section: remove the code if your own function has no seed argument
     # Warning: seeding is always at the .GlobalEnv level, whenever the seeding is applied inside a function, another envir, etc.
     if (base::exists(x = ".Random.seed", where = -1, envir = .GlobalEnv, frame = , mode = "any", inherits = TRUE)) {
         # if .Random.seed does not exists, it means that no random operation has been performed yet in any R environment
@@ -410,6 +423,7 @@ BACKBONE <- function(
     ######## end warning initiation
 
     ######## graphic device checking
+    # optional section: remove the code if no graphics used in your functions
     # check the number of graphic devices on exit
     dev_list <- grDevices::dev.list() 
     # This check is here in case the developer has not correctly fill tempo_arg
@@ -452,15 +466,17 @@ BACKBONE <- function(
     ######## end graphic device checking
 
     ######## other checkings
-    if(base::length(x = data) == 0){
-        tempo_cat <- base::paste0(
-            error_text_start, 
-            "data ARGUMENT CANNOT BE LENGTH 0.", 
-            collapse = NULL, 
-            recycle0 = FALSE
-        )
-        base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL)
-    }
+    # optional section: remove the code if no graphics used in your functions
+    # Example of other checking:
+    # if(base::length(x = data) == 0){
+    #     tempo_cat <- base::paste0(
+    #         error_text_start, 
+    #         "data ARGUMENT CANNOT BE LENGTH 0.", 
+    #         collapse = NULL, 
+    #         recycle0 = FALSE
+    #     )
+    #     base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL)
+    # }
     ######## end other checkings
 
     #### end second round of checking and data preparation
@@ -468,55 +484,12 @@ BACKBONE <- function(
     #### main code
 
     ######## warning
+    # optional section: remove the code if no warning used in your functions
+    # This section can be used in your main code each time you need a warning message. Just adapt the text in tempo_warn : 
     warn_count <- warn_count + 1
     tempo_warn <- base::paste0("(", warn_count,") THE FIRST FOR & WHILE LOOP STEPS HAVE BEEN TOO FAR AND SUBSEQUENT LOOP STEPS WILL NOT RUN.", collapse = NULL, recycle0 = FALSE)
     warn <- base::paste0(base::ifelse(test = base::is.null(x = warn), yes = tempo_warn, no = base::paste0(warn, "\n\n", tempo_warn, collapse = NULL, recycle0 = FALSE)), collapse = NULL, recycle0 = FALSE)
     ######## end warning
-
-
-    ######## reserved word checking
-    # example with data as data frame
-    if(base::any(base::names(x = data) %in% reserved_words, na.rm = TRUE)){
-        tempo_log <- base::names(x = data) %in% reserved_words
-        tempo_cat <- base::paste0(
-            error_text_start, 
-            "COLUMN NAMES OF THE data ARGUMENT CANNOT BE ", 
-            base::ifelse(test = base::length(x = reserved_words) == 1, yes = "THIS WORD", no = "ONE OF THESE WORDS"), 
-            ":\n", 
-            base::paste0(reserved_words, collapse = "\n", recycle0 = FALSE), 
-            "\n", 
-            base::ifelse(test = base::length(x = reserved_words) == 1, yes = "IT IS", no = "THEY ARE"), 
-            " RESERVED FOR THE PROPER EXECUTION OF THE ", 
-            function_name, 
-            " FUNCTION.", 
-            collapse = NULL, 
-            recycle0 = FALSE
-        )
-        base::stop(
-            base::paste0(
-                "\n\n================\n\n", 
-                tempo_cat, 
-                "\n\n================\n\n", 
-                base::ifelse(
-                    test = base::is.null(x = warn), 
-                    yes = "", 
-                    no = base::paste0(
-                        "IN ADDITION\nWARNING", 
-                        base::ifelse(test = warn_count > 1, yes = "S", no = ""), 
-                        ":\n\n", 
-                        warn, 
-                        collapse = NULL, 
-                        recycle0 = FALSE
-                    )
-                ), 
-                collapse = NULL, 
-                recycle0 = FALSE
-            ), 
-            call. = FALSE, 
-            domain = NULL
-        )
-    }
-    ######## end reserved word checking
 
     #### end main code
 
@@ -538,7 +511,9 @@ BACKBONE <- function(
     #### end warning output
 
     #### output
-    base::return(output)
+    # optional section: remove the code if no output returned in your own function
+    # Example:
+    # base::return(output)
     #### end output
 
 }
