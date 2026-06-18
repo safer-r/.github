@@ -160,8 +160,8 @@ Functions of class S3 from the safer-R project present the same encoding structu
 <br /><br />
 ## Make a safer-R function
 
-- Recover the [Backbone.R code](https://github.com/safer-r/.github/tree/main/profile).
-- Follow the instructions [here](https://gael-millot.github.io/protocols/docs/Protocol%20167-rev0%20BACKBONE%20OF%20SAFER%20R%20FUNCTIONS.htm).
+- Recover the [Backbone.R code](https://github.com/safer-r/.github/blob/main/profile/backbone.R).
+- Follow the instructions (in dev).
 - Warning: all the safer-R functions inside another safer-R function must have the `safer_ckeck` argument set to FALSE, to avoid repetitive checkings that would exponentially increase the function execution time.
 <br /><br />
 ## Make a safer-R script
@@ -173,9 +173,9 @@ Functions of class S3 from the safer-R project present the same encoding structu
 Functions from all these packages use the safer-R backbone and, thus, respect the criteria of the safer-R project.
 
 - [saferDev](https://github.com/safer-r/saferDev): R function and pipeline development.
-- [saferMatrix](https://github.com/safer-r/saferMatrix): matrix handling.
-- [saferGraph](https://github.com/safer-r/saferGraph): classical graphic handling.
-- [saferTool](https://github.com/safer-r/saferTool): basic tools.
-- [saferTool2](https://github.com/safer-r/saferTool2): sophisticated tools.
-- [saferGG](https://github.com/safer-r/saferGG): ggplot2 graphics.
+- [saferMatrix](https://github.com/safer-r/saferMatrix): matrix handling (in dev).
+- [saferGraph](https://github.com/safer-r/saferGraph): classical graphic handling (in dev).
+- [saferTool](https://github.com/safer-r/saferTool): basic tools (in dev).
+- [saferTool2](https://github.com/safer-r/saferTool2): sophisticated tools (in dev).
+- [saferGG](https://github.com/safer-r/saferGG): ggplot2 graphics (in dev).
 
