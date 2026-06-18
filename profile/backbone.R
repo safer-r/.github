@@ -4,7 +4,7 @@ BACKBONE <- function(
     seed = NULL, # remove this argument if no random seed setting required
     lib_path = NULL, # mandatory argument of safer functions
     safer_check = TRUE, # mandatory argument of safer functions
-    error_text = "" # mandatory argument of safer functions. Warning: only argument that should not be without dafault value, because the safer function would return a R classical non traced error message
+    error_text = "" # mandatory argument of safer functions. Warning: do not change the default value.
 ){
 
     #### package name
@@ -412,7 +412,7 @@ BACKBONE <- function(
                 collapse = NULL, 
                 recycle0 = FALSE
             )
-            base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) # == in stop() to be able to add several messages between ==
+            base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL) 
         }
     }
     ######## end management of "" in arguments of mode character
@@ -500,7 +500,12 @@ BACKBONE <- function(
 
     #### end second round of checking and data preparation
 
+
+
+
+
     #### main code
+    # add the code of your function here
 
     ######## warning
     # optional section: remove the code if no warning used in your functions
@@ -510,7 +515,36 @@ BACKBONE <- function(
     warn <- base::paste0(base::ifelse(test = base::is.null(x = warn), yes = tempo_warn, no = base::paste0(warn, "\n\n", tempo_warn, collapse = NULL, recycle0 = FALSE)), collapse = NULL, recycle0 = FALSE)
     ######## end warning
 
+    ######## code to use for error message in the main code
+    # optional section: remove the code if no error used in your functions
+    if(){
+        tempo_cat <- base::paste0(
+            error_text_start, 
+            "MESSAGE TO PERSONALIZE", 
+            collapse = NULL, 
+            recycle0 = FALSE
+        )
+        base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL)
+    }
+    ######## end code to use for error message in the main code
+
+    ######## code to use for error message in the main code when warning sections are present
+    # optional section: remove the code if no error used in your functions
+    if(){
+        tempo_cat <- base::paste0(
+            error_text_start, 
+            "MESSAGE TO PERSONALIZE", 
+            collapse = NULL, 
+            recycle0 = FALSE
+        )
+        base::stop(base::paste0("\n\n================\n\n", tempo_cat, "\n\n================\n\n", base::ifelse(test = base::is.null(x = warn), yes = "", no = base::paste0("IN ADDITION\nWARNING", base::ifelse(test = warn_count > 1, yes = "S", no = ""), ":\n\n", warn, collapse = NULL, recycle0 = FALSE)), collapse = NULL, recycle0 = FALSE), call. = FALSE, domain = NULL)
+    }
+    ######## end code to use for error message in the main code when warning sections are present
+
     #### end main code
+
+
+
 
     #### warning output
     # must be before return()
