@@ -160,8 +160,8 @@ Functions of class S3 from the safer-R project present the same encoding structu
 <br /><br />
 ## Make a safer-R function
 
-- Recover the [Backbone.R code](https://github.com/safer-r/.github/blob/main/profile/backbone.R).
-- Follow the instructions (in dev).
+- install the saferMake package. Run the `saferMake::make()` function (in dev).
+- Of note, the backbone of a safer-r function can be found [here](https://github.com/safer-r/.github/blob/main/profile/backbone.R).
 - Warning: all the safer-R functions inside another safer-R function must have the `safer_ckeck` argument set to FALSE, to avoid repetitive checkings that would exponentially increase the function execution time.
 <br /><br />
 ## Make a safer-R script
@@ -173,6 +173,7 @@ Functions of class S3 from the safer-R project present the same encoding structu
 Functions from all these packages use the safer-R backbone and, thus, respect the criteria of the safer-R project.
 
 - [saferDev](https://github.com/safer-r/saferDev): R function and pipeline development.
+- [saferMake](https://github.com/safer-r/saferMake): convert a R function into a safer-r function through an interactive web interface (in dev).
 - [saferMatrix](https://github.com/safer-r/saferMatrix): matrix handling (in dev).
 - [saferGraph](https://github.com/safer-r/saferGraph): classical graphic handling (in dev).
 - [saferTool](https://github.com/safer-r/saferTool): basic tools (in dev).
