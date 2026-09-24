@@ -160,7 +160,7 @@ Functions of class S3 from the safer-R project present the same encoding structu
 <br /><br />
 ## Make a safer-R function
 
-- install the saferMake package. Run the `saferMake::make()` function (in dev).
+- install the [saferMake](https://github.com/safer-r/saferMake) package. Run the `saferMake::make()` function (in dev).
 - Of note, the backbone of a safer-r function can be found [here](https://github.com/safer-r/.github/blob/main/profile/backbone.R).
 - Warning: all the safer-R functions inside another safer-R function must have the `safer_ckeck` argument set to FALSE, to avoid repetitive checkings that would exponentially increase the function execution time.
 <br /><br />
