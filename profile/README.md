@@ -136,11 +136,12 @@ Problems are recapitulated in websites, like [`R inferno`](https://www.burns-sta
 <br /><br />
 ## Features of the safer-R functions
 
-Functions of class S3 from the safer-R project present the same encoding structure before the 'main' code section (see the [backbone.R](./backbone.R) file), which tackle the aspects described above, including:
+Functions of class S3 from the safer-R project present the same encoding structure before the 'main' code section (see the [backbone](https://github.com/safer-r/.github/safer-r/saferMake/inst/) file), which tackle the aspects described above, including:
 - Accuracy
     - Package systematically indicated for any used function (R Scope seeking controlled). Example `base::paste()` instead of `paste()`.
     - All the arguments of functions written, even if default values are used, to prevent argument name change or default value change (like the `stringsAsFactors` argument of `read.table()`, for which default value changed from `TRUE` to `FALSE` since R version 4.0). Example `base::sum(1:3, na.rm = FALSE)` instead of `base::sum(1:3)`.
-    - Argument `safer_check` added in each safer-R function, that checks 1) the presence in local R library folders of all the non basic functions and corresponding packages used in the code and 2) that all the classical R operators (`<-`, `(`, etc.) are not overwritten by other packages, since these packages always preceed the base R items in the R scope.
+    - Argument `safer_check` added in each safer-R function, that checks 1) the presence in local R library folders of all the non basic packages and functions used in the code (`ggplot2::geom_bar` for instance) and 2) that all the classical R operators (`<-`, `(`, etc.) are not overwritten by other imported packages, since these packages always preceed the base R items in the R scope.
+    - Argument `lib_path` added in each safer-R function, to deal with the default pats of R libraries or to set specific paths. 
     - Strong checking of each argument, for instance: 
         - Values for arguments with no default values.
         - Expected class, type, mode, length, restricted values panel, kind of numeric values in addition to the distinction between 'integer' and 'double' (proportion only? Inf values authorized? negative values authorized?).
@@ -149,7 +150,8 @@ Functions of class S3 from the safer-R project present the same encoding structu
         - Authorized empty value or not (empty list for instance).
         - Authorized `""` value in vector of characters or not.
         - Expected structure of complex objects, like data frames and lists.
-    - Seeding of the random number generator using an argument each time randomness is used, and protecting potential seeding in the global environment.
+    - Seeding of the random number generator using an argument each time randomness is used inside the safer-r function, and protecting potential seeding in the global environment, by returning to this seeding when the safer-r function execution ends.
+    - Checking that all graphics devices opened by a safer-r function are closed (optional) and that the graphic parameters returns to the settings applied before the safer-r execution.
     - Curly brackets systematically written.
 - Intuitiveness
     - Argument `...` not authorized in safer-R functions.
@@ -162,7 +164,8 @@ Functions of class S3 from the safer-R project present the same encoding structu
 ## Make a safer-R function
 
 - install the [saferMake](https://github.com/safer-r/saferMake) package. Run the `saferMake::make()` function (in dev).
-- Of note, the backbone of a safer-r function can be found [here](https://github.com/safer-r/.github/safer-r/saferMake/inst/backbone_v19.6.R).
+- Of note, the backbone of a safer-r function can be found [here](https://github.com/safer-r/.github/safer-r/saferMake/inst/).
+- AI [skills](./skills_20261016.zip) are also available for building R fonctions with the safer-r recommendations.
 - Warning: all the safer-R functions inside another safer-R function must have the `safer_ckeck` argument set to FALSE, to avoid repetitive checkings that would exponentially increase the function execution time.
 <br /><br />
 ## Make a safer-R script
