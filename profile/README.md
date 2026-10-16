@@ -150,12 +150,13 @@ Functions of class S3 from the safer-R project present the same encoding structu
         - Authorized `""` value in vector of characters or not.
         - Expected structure of complex objects, like data frames and lists.
     - Seeding of the random number generator using an argument each time randomness is used, and protecting potential seeding in the global environment.
+    - Curly brackets systematically written.
 - Intuitiveness
     - Argument `...` not authorized in safer-R functions.
     - Argument with `NA` as only value not authorized in safer-R functions, in order to deal with `if(all(X, na.rm = TRUE)){}` that would return `TRUE` if `X` is only made of `NA`.
 - Explicit messages
     - Name of the functions and corresponding packages in all error and warning messages, including the embedding functions, so that we better know the origin of the message.
-    - Explicit error messages,
+    - Explicit error messages.
     - All warning messages added in the error message string.
 <br /><br />
 ## Make a safer-R function
