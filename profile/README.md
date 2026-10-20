@@ -152,7 +152,7 @@ Functions of class S3 from the safer-R project present the same encoding structu
         - Expected structure of complex objects, like data frames and lists.
     - Seeding of the random number generator using an argument each time randomness is used inside the safer-r function, and protecting potential seeding in the global environment, by returning to this seeding when the safer-r function execution ends.
     - Checking that all graphics devices opened by a safer-r function are closed (optional) and that the graphic parameters returns to the settings applied before the safer-r execution.
-    - Curly brackets systematically written.
+    - Curly brackets systematically written. See the [Apple's 2014 "goto fail" SSL bug in C](https://en.wikipedia.org/wiki/Unreachable_code#goto_fail_bug) geenrated by missing Curly brackets.
     - `TRUE` and `FALSE` never abbreviated `T` or `F`. Indeed, `T` or `F` are not R reserved words and can be modified, contrary to `TRUE` and `FALSE`.
 - Intuitiveness
     - Argument `...` not authorized in safer-R functions.
