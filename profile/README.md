@@ -138,7 +138,7 @@ The safer-R project gathers R functions of class S3 with a similar encoding that
 <br /><br />
 ## Features of the safer-R functions
 
-Functions of class S3 from the safer-R project present the same encoding structure before the 'main' code section (see the [backbone](https://github.com/safer-r/.github/safer-r/saferMake/inst/) file), which tackle the aspects described above, including:
+Functions of class S3 from the safer-R project present the same encoding structure before the 'main' code section (see the [backbone](https://github.com/safer-r/saferMake/tree/main/inst) file), which tackle the aspects described above, including:
 - Accuracy
     - Package systematically indicated for any used function (R Scope seeking controlled). Example `base::paste()` instead of `paste()`.
     - All the arguments of functions written, even if default values are used, to prevent argument name change or default value change (like the `stringsAsFactors` argument of `read.table()`, for which default value changed from `TRUE` to `FALSE` since R version 4.0). Example `base::sum(1:3, na.rm = FALSE)` instead of `base::sum(1:3)`. In particular cases, like when the default value depends on another argument or on the internal environment of the function (example `envir = as.environment(pos)` in `utils::getFromNamespace(x, ns, pos = -1, envir = as.environment(pos))`), the default expression cannot be copied. Then the argument name is written with an empty value (example `envir = `), meaning that the default value is used but cannot be fixed! Other cases are argument with no default value for which absence of value means something. Example: `base::.libPaths(new = , include.site = TRUE)` returns the paths of the R libraries, whereas `base::.libPaths(new = base::.libPaths(), include.site = TRUE)` sets them. It is recommanded in safer-r functions to write all the arguments, detect the ones with no values and test (using `testthat`) that the default values used by the code are unchanged, for instance `testthat::expect_identical(object = base::formals(fun = utils::getFromNamespace)$pos, expected = -1)`, so that any change in a new version of R or of a package is detected by the continuous integration.
@@ -169,7 +169,7 @@ Functions of class S3 from the safer-R project present the same encoding structu
 ## Make a safer-R function
 
 - install the [saferMake](https://github.com/safer-r/saferMake) package. Run the `saferMake::make()` function (in dev).
-- Of note, the backbone of a safer-r function can be found [here](https://github.com/safer-r/.github/safer-r/saferMake/inst/).
+- Of note, the backbone of a safer-r function can be found [here](https://github.com/safer-r/saferMake/tree/main/inst).
 - AI [skills](./skills_20261016.zip) are also available for building R fonctions with the safer-r recommendations.
 - Warning: all the safer-R functions inside another safer-R function must have the `safer_ckeck` argument set to FALSE, to avoid repetitive checkings that would exponentially increase the function execution time.
 <br /><br />
